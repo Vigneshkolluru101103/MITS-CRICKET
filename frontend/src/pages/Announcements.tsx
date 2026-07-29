@@ -11,7 +11,7 @@ export const Announcements: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [activeAnnouncement, setActiveAnnouncement] = useState<Announcement | null>(null);
 
-  const categories = ['ALL', 'REGISTRATION', 'AUCTION', 'SCHEDULE', 'RULES', 'GENERAL'];
+  const categories = ['ALL', 'REGISTRATION', 'AUCTION', 'RULES'];
 
   const filteredAnnouncements = selectedCategory === 'ALL'
     ? AnnouncementsData

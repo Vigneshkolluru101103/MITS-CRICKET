@@ -238,21 +238,49 @@ All registered players will be placed into the auction pool following selection 
   },
   {
     id: 'a3',
-    title: 'Official Partnership with CricHeroes for Live Streaming & Ball-by-Ball Scoring',
-    summary: 'Watch every ball live, follow real-time wagon wheels, and view player stats on CricHeroes.',
-    content: `We are thrilled to partner with **CricHeroes**, the premier digital cricket platform!
+    title: 'DILMAN PREMIER LEAGUE (DPL) – TOURNAMENT DETAILS 🏆',
+    summary: 'Official tournament format, match rules, player benefits, auction guidelines, and discipline policies.',
+    content: `📢 **Attention All Captains**
 
-Through this tie-up:
-- Every match will feature **HD Live Video Streaming** with commentary.
-- Instant ball-by-ball score updates, Manhattan charts, and wagon wheel insights.
-- Individual player profiles linked directly to official CricHeroes career stats.
+Please read the tournament rules carefully. Participation in the tournament means you agree to all the rules and regulations mentioned below.
 
-Make sure to bookmark the [Watch Live on CricHeroes](${CricHeroesConfig.liveUrl}) link!`,
-    category: 'GENERAL',
-    date: '2026-07-20',
-    author: 'Tech Directorate',
-    isImportant: false,
-    coverImage: 'https://images.unsplash.com/photo-1512719991207-6b45d2e071dd?w=800&auto=format&fit=crop&q=80'
+📋 **Tournament Format**
+🔹 **Teams**: 3 Teams
+🔹 **Match Format**: 20 Overs
+🔹 **League Stage**: Each team will play 2 matches.
+🔹 **Final Match**: Top 2 teams from the points table will qualify for the Grand Final.
+
+🏏 **Match Rules**
+🔹 **Ball**: White Leather Ball
+🔹 **Rules**: All ICC Rules are applicable throughout the tournament.
+
+🎽 **Player Benefits**
+🔹 Every registered player will receive a **FREE Tournament Jersey**. 👕
+
+🔨 **Auction**
+🔹 This is an Auction Bidding Tournament.
+🔹 All teams will be formed through the official player auction.
+
+⚖️ **Tournament Management**
+🔹 The tournament management reserves the right to modify or update the rules based on situations and tournament requirements.
+🔹 The decision of the Tournament Management is final and binding in all matters.
+
+⚠️ **Discipline & Responsibility**
+🔹 No unnecessary arguments, disputes, or issues will be accepted.
+🔹 Each Team Captain is fully responsible for the discipline and behavior of their players and supporters.
+🔹 Any misconduct may lead to warnings, penalties, or disqualification, as decided by the Tournament Management.
+
+🔥 **Get Ready for an Exciting Cricket Battle!**
+
+📢 Auction Date, Fixtures & Match Schedule will be announced soon.
+
+🏆 **DILMAN PREMIER LEAGUE (DPL)** 🏏
+*Play Hard • Play Fair • Create History 💪🔥*`,
+    category: 'RULES',
+    date: '2026-07-29',
+    author: 'DPL Tournament Management',
+    isImportant: true,
+    coverImage: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800&auto=format&fit=crop&q=80'
   }
 ];
 

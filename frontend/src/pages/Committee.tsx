@@ -8,14 +8,14 @@ export const Committee: React.FC = () => {
       {/* Section Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <h1 className="text-3xl sm:text-5xl font-black text-white font-display tracking-tight">
-          Student <span className="text-emerald-400">Committee</span>
+          Team <span className="text-emerald-400">Captains</span>
         </h1>
         <p className="text-slate-400 text-base sm:text-lg leading-relaxed">
-          Meet the dedicated students working together to organize and manage the MITS Premier League.
+          Meet the 3 team captains leading the DILMAN Premier League franchise teams.
         </p>
       </div>
 
-      {/* Clean Responsive Grid matching Sponsor Card Spacing */}
+      {/* Clean Responsive Grid - 3 cards side by side */}
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {committeeData.map((member) => (

@@ -27,7 +27,7 @@ export const Contact: React.FC = () => {
   };
 
   return (
-    <div className="pt-28 pb-20 space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="pt-28 pb-20 space-y-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <ToastContainer toasts={toasts} onDismiss={(id) => setToasts(t => t.filter(x => x.id !== id))} />
 
       {/* Header */}
@@ -41,9 +41,9 @@ export const Contact: React.FC = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
         {/* Contact Form */}
-        <div className="glass-panel p-8 rounded-3xl border border-slate-800 space-y-6">
+        <div className="glass-panel p-8 sm:p-10 rounded-3xl border border-slate-800 space-y-6">
           <h3 className="text-2xl font-bold text-white font-display">Send Us a Direct Message</h3>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -54,7 +54,7 @@ export const Contact: React.FC = () => {
                 required
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="e.g. Arjun Das"
+                placeholder="your name"
                 className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 focus:border-[#C5A059] focus:outline-none text-sm"
               />
             </div>
@@ -66,7 +66,7 @@ export const Contact: React.FC = () => {
                 required
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="arjun@example.com"
+                placeholder="your email@example.com"
                 className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 focus:border-[#C5A059] focus:outline-none text-sm"
               />
             </div>
@@ -76,13 +76,11 @@ export const Contact: React.FC = () => {
               <select
                 value={formData.subject}
                 onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 text-white focus:border-[#C5A059] focus:outline-none text-sm"
+                className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 text-white focus:border-[#C5A059] focus:outline-none text-sm cursor-pointer"
               >
-                <option value="General Query">General Query</option>
-                <option value="Player Registration Help">Player Registration Help</option>
-                <option value="Auction & Rules Clarification">Auction & Rules Clarification</option>
-                <option value="Sponsorship & Brand Partnership">Sponsorship & Brand Partnership</option>
-                <option value="Media & Press Accreditation">Media & Press Accreditation</option>
+                <option value="General Query" className="bg-slate-900 text-white">General Query</option>
+                <option value="Player Registration Help" className="bg-slate-900 text-white">Player Registration Help</option>
+                <option value="Auction & Rules Clarification" className="bg-slate-900 text-white">Auction & Rules Clarification</option>
               </select>
             </div>
 
@@ -105,45 +103,50 @@ export const Contact: React.FC = () => {
         </div>
 
         {/* Location & Info Card */}
-        <div className="space-y-6">
-          <div className="glass-panel p-8 rounded-3xl border border-slate-800 space-y-6">
+        <div className="glass-panel p-8 sm:p-10 rounded-3xl border border-slate-800 flex flex-col justify-between space-y-8">
+          <div className="space-y-6">
             <h3 className="text-2xl font-bold text-white font-display">DILMAN Sports Directorate</h3>
 
-            <div className="space-y-4 text-sm text-slate-300">
-              <div className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 text-[#C5A059] shrink-0 mt-1" />
+            <div className="space-y-6 text-sm text-slate-300">
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-2xl bg-slate-900 border border-slate-800 text-[#C5A059] shrink-0">
+                  <MapPin className="h-6 w-6" />
+                </div>
                 <div>
-                  <strong className="text-white block">Stadium Venue Location:</strong>
-                  DILMAN Central Sports Stadium, Dilman Institute of Technology and Science, Varikoli, Puthencruz, Ernakulam, Kerala 682308
+                  <strong className="text-white block text-base font-display mb-1">Stadium Venue Location:</strong>
+                  <span className="text-slate-300 leading-relaxed block">
+                    MITS COLLEGE GROUND, Madanapalle Institute of Technology and Science, Kadiri road, Angallu, 517326.
+                  </span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                <Mail className="h-5 w-5 text-[#C5A059] shrink-0" />
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-2xl bg-slate-900 border border-slate-800 text-[#C5A059] shrink-0">
+                  <Mail className="h-6 w-6" />
+                </div>
                 <div>
-                  <strong className="text-white block">Email Helpdesk:</strong>
-                  <a href="mailto:dpl@dilman.ac.in" className="text-[#E2C889] hover:underline">dpl@dilman.ac.in</a>
+                  <strong className="text-white block text-base font-display mb-1">Email Helpdesk:</strong>
+                  <a href="mailto:sumankohli3819@gmail.com" className="text-[#E2C889] hover:underline font-mono">
+                    sumankohli3819@gmail.com
+                  </a>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-[#C5A059] shrink-0" />
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-2xl bg-slate-900 border border-slate-800 text-[#C5A059] shrink-0">
+                  <Phone className="h-6 w-6" />
+                </div>
                 <div>
-                  <strong className="text-white block">Helpline Numbers:</strong>
-                  +91 98765 43210 (Sports Director) / +91 94470 12345 (League Convener)
+                  <strong className="text-white block text-base font-display mb-1">Helpline Numbers:</strong>
+                  <span className="text-slate-200 font-mono">+91 6380526866</span> (Organizer)
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Google Maps Visual Placeholder */}
-          <div className="relative h-64 w-full rounded-3xl overflow-hidden glass-panel border border-slate-800 bg-slate-900 flex items-center justify-center text-center p-6">
-            <div className="space-y-2">
-              <MapPin className="h-8 w-8 text-[#C5A059] mx-auto animate-bounce" />
-              <h4 className="text-lg font-bold text-white">DILMAN Central Stadium Turf</h4>
-              <p className="text-xs text-slate-400">Varikoli, Ernakulam, Kerala 682308</p>
-              <Badge variant="gold" size="sm">GPS Verified Grounds</Badge>
-            </div>
+          <div className="pt-6 border-t border-slate-800 text-xs font-mono text-slate-400 flex items-center justify-between">
+            <span>MITS DPL 2026</span>
+            <span className="text-emerald-400">SUPPORT HELPDESK</span>
           </div>
         </div>
       </div>
