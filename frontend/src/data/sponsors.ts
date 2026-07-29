@@ -11,7 +11,7 @@ export const sponsorsData: SponsorItem[] = [
     id: '1',
     name: 'SUMAN THOTI',
     designation: 'Title Sponsor & Patron',
-    photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+    photo: '/images/suman_thoti.jpg',
     description: 'Supporting the MITS Premier League through valuable sponsorship, mentorship, and continuous encouragement for student athletes.',
   },
   {
