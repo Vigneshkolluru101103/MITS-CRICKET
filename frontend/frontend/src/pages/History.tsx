@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Trophy } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Trophy, Image as ImageIcon } from 'lucide-react';
 
 export const History: React.FC = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
+  const touchStartX = useRef<number | null>(null);
 
   // Gallery slider images (RED TEAM champions, captains, huddle, match action, and team squads)
   const galleryImages = [
@@ -154,6 +155,18 @@ export const History: React.FC = () => {
     },
   ];
 
+  // Preload all gallery images in browser cache for instant mobile playback
+  useEffect(() => {
+    galleryImages.forEach((img) => {
+      const imageObj = new Image();
+      imageObj.src = img.url;
+      // Preload root path fallback as well
+      const fallbackSrc = img.url.replace('/images/', '/');
+      const fallbackObj = new Image();
+      fallbackObj.src = fallbackSrc;
+    });
+  }, []);
+
   const pastChampionsList = [
     {
       year: '2025',
@@ -172,8 +185,25 @@ export const History: React.FC = () => {
     setCurrentSlideIndex(prev => (prev === galleryImages.length - 1 ? 0 : prev + 1));
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const diffX = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diffX) > 40) {
+      if (diffX > 0) {
+        handleNextSlide();
+      } else {
+        handlePrevSlide();
+      }
+    }
+    touchStartX.current = null;
+  };
+
   return (
-    <div className="pt-28 pb-20 space-y-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="pt-28 pb-20 space-y-16 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
       {/* 1. TOURNAMENT HISTORY SLIDER SECTION */}
       <div className="space-y-8 text-center">
@@ -184,20 +214,30 @@ export const History: React.FC = () => {
             <span>Tournament History</span>
           </h1>
           <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto font-normal">
-            Relive the most memorable moments from previous tournament
+            Relive the most memorable moments from previous tournaments
           </p>
         </div>
 
-        {/* Full Width Image Display */}
-        <div className="relative rounded-3xl overflow-hidden border border-slate-800 bg-slate-950 shadow-2xl group">
-          <div className="relative h-[360px] sm:h-[520px] w-full overflow-hidden bg-slate-950 flex items-center justify-center">
+        {/* Full Width Image Display with Touch Swipe for Mobile */}
+        <div 
+          className="relative rounded-3xl overflow-hidden border border-slate-800 bg-slate-950 shadow-2xl group touch-pan-y select-none"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Top Floating Counter Pill */}
+          <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700/60 text-xs font-mono text-emerald-400 font-bold shadow-lg flex items-center gap-1.5">
+            <ImageIcon className="h-3.5 w-3.5 text-emerald-400" />
+            <span>{currentSlideIndex + 1} / {galleryImages.length}</span>
+          </div>
+
+          <div className="relative h-[380px] sm:h-[540px] w-full overflow-hidden bg-slate-950 flex items-center justify-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlideIndex}
                 initial={{ opacity: 0, scale: 1.01 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.99 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.35 }}
                 className="relative w-full h-full flex items-center justify-center"
               >
                 {/* Ambient Blurred Backdrop to fill aspect ratio cleanly without distorting */}
@@ -228,12 +268,19 @@ export const History: React.FC = () => {
               </motion.div>
             </AnimatePresence>
 
+            {/* Bottom Caption Overlay */}
+            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950/90 via-slate-950/60 to-transparent p-4 text-center z-20">
+              <p className="text-sm sm:text-base font-semibold text-slate-200 tracking-wide drop-shadow-md">
+                {galleryImages[currentSlideIndex].title}
+              </p>
+            </div>
+
             {galleryImages.length > 1 && (
               <>
                 {/* Left Navigation Arrow */}
                 <button
                   onClick={handlePrevSlide}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-teal-900/70 hover:bg-teal-700 text-teal-300 border border-teal-500/40 flex items-center justify-center transition-all shadow-lg cursor-pointer backdrop-blur-md"
+                  className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-slate-900/80 hover:bg-emerald-600 text-slate-200 hover:text-white border border-slate-700/80 flex items-center justify-center transition-all shadow-xl cursor-pointer backdrop-blur-md z-20"
                   aria-label="Previous Photo"
                 >
                   <ChevronLeft className="h-6 w-6" />
@@ -242,13 +289,58 @@ export const History: React.FC = () => {
                 {/* Right Navigation Arrow */}
                 <button
                   onClick={handleNextSlide}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-teal-900/70 hover:bg-teal-700 text-teal-300 border border-teal-500/40 flex items-center justify-center transition-all shadow-lg cursor-pointer backdrop-blur-md"
+                  className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-slate-900/80 hover:bg-emerald-600 text-slate-200 hover:text-white border border-slate-700/80 flex items-center justify-center transition-all shadow-xl cursor-pointer backdrop-blur-md z-20"
                   aria-label="Next Photo"
                 >
                   <ChevronRight className="h-6 w-6" />
                 </button>
               </>
             )}
+          </div>
+        </div>
+
+        {/* 1B. ALL 29 PHOTOS GRID THUMBNAIL GALLERY (MOBILE & DESKTOP) */}
+        <div className="space-y-4 pt-4">
+          <div className="flex items-center justify-between px-2">
+            <h3 className="text-lg sm:text-xl font-bold text-white font-display flex items-center gap-2">
+              <ImageIcon className="h-5 w-5 text-emerald-400" />
+              <span>Full Photo Gallery ({galleryImages.length} Photos)</span>
+            </h3>
+            <span className="text-xs text-slate-400">Tap thumbnail to view</span>
+          </div>
+
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2.5 max-h-[360px] overflow-y-auto p-2 bg-slate-950/60 rounded-2xl border border-slate-800/80 custom-scrollbar">
+            {galleryImages.map((img, index) => {
+              const isActive = index === currentSlideIndex;
+              return (
+                <button
+                  key={img.id}
+                  onClick={() => setCurrentSlideIndex(index)}
+                  className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all cursor-pointer group ${
+                    isActive 
+                      ? 'border-emerald-400 scale-95 ring-2 ring-emerald-400/40 shadow-lg' 
+                      : 'border-slate-800 opacity-70 hover:opacity-100 hover:border-slate-600'
+                  }`}
+                  aria-label={`View photo ${index + 1}: ${img.title}`}
+                >
+                  <img
+                    src={img.url}
+                    alt={img.title}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (target.src.includes('/images/')) {
+                        target.src = target.src.replace('/images/', '/');
+                      }
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-1">
+                    <span className="text-[10px] text-white font-mono font-bold">#{index + 1}</span>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
