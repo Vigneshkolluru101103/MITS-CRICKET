@@ -15,11 +15,13 @@ export const Committee: React.FC = () => {
         </p>
       </div>
 
-      {/* Clean Responsive Grid (Desktop: 4-5 cards, Tablet: 2-3 cards, Mobile: 1-2 cards) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        {committeeData.map((member) => (
-          <CommitteeCard key={member.id} member={member} />
-        ))}
+      {/* Clean Responsive Grid matching Sponsor Card Spacing */}
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          {committeeData.map((member) => (
+            <CommitteeCard key={member.id} member={member} />
+          ))}
+        </div>
       </div>
     </div>
   );
