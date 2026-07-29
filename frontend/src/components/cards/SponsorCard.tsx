@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 import type { SponsorItem } from '../../data/sponsors';
+import { Badge } from '../ui/Badge';
 
 interface SponsorCardProps {
   sponsor: SponsorItem;
@@ -12,37 +14,44 @@ export const SponsorCard: React.FC<SponsorCardProps> = ({ sponsor }) => {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      whileHover={{ y: -6 }}
-      transition={{ duration: 0.4 }}
-      className="bg-slate-900/80 backdrop-blur-md rounded-[20px] p-8 sm:p-10 border border-slate-800/80 shadow-xl hover:border-emerald-500/40 hover:shadow-2xl hover:shadow-emerald-500/5 transition-all duration-300 flex flex-col items-center text-center group"
+      whileHover={{ y: -5 }}
+      transition={{ duration: 0.3 }}
+      className="group glass-panel rounded-2xl border border-slate-800/80 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:border-[#C5A059]/40 shadow-xl hover:shadow-2xl"
     >
-      {/* Sponsor Photo Frame with Extra Breathing Space */}
-      <div className="p-2.5 bg-slate-950/80 rounded-[18px] border border-slate-800/90 shadow-inner mb-7 group-hover:border-emerald-500/30 transition-colors">
-        <div className="w-[140px] h-[140px] rounded-[12px] overflow-hidden shadow-md">
-          <img
-            src={sponsor.photo}
-            alt={sponsor.name}
-            className="w-[140px] h-[140px] object-cover transition-transform duration-500 group-hover:scale-105"
-          />
+      {/* Full Bleed Image Container */}
+      <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-950">
+        <img
+          src={sponsor.photo}
+          alt={sponsor.name}
+          className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0d14] via-[#0a0d14]/30 to-transparent" />
+
+        <div className="absolute top-4 left-4">
+          <Badge variant="gold" icon={<Sparkles className="h-3 w-3" />}>
+            OFFICIAL SPONSOR
+          </Badge>
         </div>
       </div>
 
-      {/* Sponsor Name */}
-      <h3 className="text-[24px] font-bold text-white tracking-tight font-display mb-1.5 group-hover:text-emerald-400 transition-colors">
-        {sponsor.name}
-      </h3>
+      {/* Card Body */}
+      <div className="p-6 pt-4 flex-1 flex flex-col justify-between">
+        <div>
+          <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-[#E2C889] transition-colors font-display">
+            {sponsor.name}
+          </h3>
 
-      {/* Designation / Company */}
-      {sponsor.designation && (
-        <p className="text-[16px] text-emerald-400 font-medium mb-4">
-          {sponsor.designation}
-        </p>
-      )}
+          {sponsor.designation && (
+            <p className="text-xs sm:text-sm font-semibold text-[#E2C889]/90 mt-1">
+              {sponsor.designation}
+            </p>
+          )}
 
-      {/* Short Description */}
-      <p className="text-[15px] leading-[1.7] text-slate-300 max-w-sm">
-        {sponsor.description}
-      </p>
+          <p className="text-xs sm:text-sm text-slate-300 mt-3 leading-relaxed">
+            {sponsor.description}
+          </p>
+        </div>
+      </div>
     </motion.div>
   );
 };
