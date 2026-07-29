@@ -49,7 +49,7 @@ export const AdminLayout: React.FC = () => {
               </span>
             </div>
             <p className="text-xs text-slate-400 font-mono mt-0.5">
-              Logged in as: <span className="text-[#D4AF37]">{currentUser?.email || 'admin@mitsdpl.in'}</span>
+              Logged in as: <span className="text-[#D4AF37]">{currentUser?.email || 'sumankohli3819@gmail.com'}</span>
             </p>
           </div>
         </div>

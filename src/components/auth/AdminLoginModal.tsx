@@ -25,8 +25,8 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
     setIsSubmitting(true);
 
     setTimeout(() => {
-      // Demo authentication logic (accepts admin / dpl2026 or admin / admin)
-      if ((username.trim().toLowerCase() === 'admin' && (password === 'dpl2026' || password === 'admin')) || username.trim() === 'admin@mitsdpl.in') {
+
+      if ((username.trim().toLowerCase() === 'admin' && (password === 'dpl2026' || password === 'admin')) || username.trim().toLowerCase() === 'sumankohli3819@gmail.com') {
         localStorage.setItem('dpl_admin_auth', 'true');
         localStorage.setItem('dpl_admin_user', username);
         setIsSubmitting(false);

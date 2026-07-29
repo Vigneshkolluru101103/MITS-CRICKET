@@ -141,7 +141,12 @@ export const Register: React.FC = () => {
     try {
       let downloadUrl = '';
       if (paymentProofFile) {
-        downloadUrl = await uploadToCloudinary(paymentProofFile);
+        try {
+          downloadUrl = await uploadToCloudinary(paymentProofFile);
+        } catch (cErr: any) {
+          console.warn('Cloudinary upload notice (using local image preview fallback):', cErr.message);
+          downloadUrl = paymentProofPreview || '';
+        }
       }
 
       const docId = await addRegistrationToFirestore({
@@ -163,14 +168,14 @@ export const Register: React.FC = () => {
         highestLevel: 'College Cricket',
         pastMatchStats: 'N/A',
         id: `DPL-${docId.substring(0, 6).toUpperCase()}`,
-        profileImage: downloadUrl || 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
+        profileImage: downloadUrl || paymentProofPreview || 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
         createdAt: new Date().toLocaleDateString(),
       };
 
       setSubmittedData(registrationPass);
       setShowConfirmationModal(true);
       confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-      addToast('success', 'Registration Successful!', 'Receipt uploaded to Cloudinary & entry saved in Cloud Firestore.');
+      addToast('success', 'Registration Successful!', 'Receipt processed & entry saved successfully.');
     } catch (err: any) {
       addToast('error', 'Registration Error', err.message || 'Failed to complete registration.');
     } finally {

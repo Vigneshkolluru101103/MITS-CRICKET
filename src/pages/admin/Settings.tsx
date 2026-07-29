@@ -34,7 +34,7 @@ export const Settings: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm font-mono pt-2">
           <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
             <span className="text-xs text-slate-400 block">ADMIN USER EMAIL</span>
-            <span className="text-[#D4AF37] font-bold">{currentUser?.email || 'admin@mitsdpl.in'}</span>
+            <span className="text-[#D4AF37] font-bold">{currentUser?.email || 'sumankohli3819@gmail.com'}</span>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1">

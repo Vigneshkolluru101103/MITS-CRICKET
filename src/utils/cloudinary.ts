@@ -25,11 +25,16 @@ export const uploadToCloudinary = async (file: File): Promise<string> => {
 
   const endpoint = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
 
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 6000);
+
   try {
     const response = await fetch(endpoint, {
       method: 'POST',
       body: formData,
+      signal: controller.signal,
     });
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -44,6 +49,10 @@ export const uploadToCloudinary = async (file: File): Promise<string> => {
 
     return data.secure_url as string;
   } catch (err: any) {
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') {
+      throw new Error('Cloudinary upload request timed out.');
+    }
     if (err.name === 'TypeError' && err.message.includes('fetch')) {
       throw new Error('Network error: Unable to connect to Cloudinary servers. Please check your connection.');
     }

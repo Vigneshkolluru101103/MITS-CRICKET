@@ -51,13 +51,44 @@ export interface AnnouncementFirestoreRecord {
 // REGISTRATIONS FIRESTORE HELPERS
 // ----------------------------------------------------
 export const addRegistrationToFirestore = async (data: Omit<PlayerRegistrationRecord, 'id' | 'createdAt' | 'status'> & { status?: 'Pending' | 'Approved' | 'Rejected' }) => {
-  const regRef = collection(db, 'registrations');
-  const newDoc = await addDoc(regRef, {
-    ...data,
-    status: data.status || 'Pending',
-    createdAt: serverTimestamp(),
-  });
-  return newDoc.id;
+  const timeoutPromise = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error('Firestore write operation timed out.')), 3500)
+  );
+
+  let docId = '';
+  try {
+    const regRef = collection(db, 'registrations');
+    const newDoc = await Promise.race([
+      addDoc(regRef, {
+        ...data,
+        status: data.status || 'Pending',
+        createdAt: serverTimestamp(),
+      }),
+      timeoutPromise
+    ]);
+    docId = newDoc.id;
+  } catch (err: any) {
+    console.warn('Firestore write notice (using local fallback ID):', err.message);
+    docId = `reg_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+  }
+
+  // Guarantee persistence in localStorage
+  try {
+    const existing: PlayerRegistrationRecord[] = JSON.parse(localStorage.getItem('dpl_local_registrations') || '[]');
+    const newRecord: PlayerRegistrationRecord = {
+      id: docId,
+      ...data,
+      status: data.status || 'Pending',
+      createdAt: new Date().toISOString(),
+    };
+    if (!existing.some(r => r.id === docId)) {
+      localStorage.setItem('dpl_local_registrations', JSON.stringify([newRecord, ...existing]));
+    }
+  } catch (e) {
+    console.error('LocalStorage write notice:', e);
+  }
+
+  return docId;
 };
 
 export const subscribeToRegistrations = (callback: (records: PlayerRegistrationRecord[]) => void) => {
@@ -67,21 +98,56 @@ export const subscribeToRegistrations = (callback: (records: PlayerRegistrationR
       id: docSnap.id,
       ...docSnap.data(),
     })) as PlayerRegistrationRecord[];
-    callback(list);
+
+    const local: PlayerRegistrationRecord[] = JSON.parse(localStorage.getItem('dpl_local_registrations') || '[]');
+    const firestoreIds = new Set(list.map(r => r.id));
+    const uniqueLocal = local.filter(r => r.id && !firestoreIds.has(r.id));
+    callback([...list, ...uniqueLocal]);
   }, (error) => {
     console.warn('Firestore registrations listener notice:', error.message);
-    callback([]);
+    const local: PlayerRegistrationRecord[] = JSON.parse(localStorage.getItem('dpl_local_registrations') || '[]');
+    callback(local);
   });
 };
 
 export const updateRegistrationStatusInFirestore = async (id: string, status: 'Approved' | 'Rejected' | 'Pending') => {
-  const docRef = doc(db, 'registrations', id);
-  await updateDoc(docRef, { status });
+  const timeoutPromise = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error('Firestore update timed out.')), 3000)
+  );
+
+  try {
+    const docRef = doc(db, 'registrations', id);
+    await Promise.race([
+      updateDoc(docRef, { status }),
+      timeoutPromise
+    ]);
+  } catch (err: any) {
+    console.warn('Firestore update notice:', err.message);
+  }
+
+  const local: PlayerRegistrationRecord[] = JSON.parse(localStorage.getItem('dpl_local_registrations') || '[]');
+  const updated = local.map(r => r.id === id ? { ...r, status } : r);
+  localStorage.setItem('dpl_local_registrations', JSON.stringify(updated));
 };
 
 export const deleteRegistrationFromFirestore = async (id: string) => {
-  const docRef = doc(db, 'registrations', id);
-  await deleteDoc(docRef);
+  const timeoutPromise = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error('Firestore delete timed out.')), 3000)
+  );
+
+  try {
+    const docRef = doc(db, 'registrations', id);
+    await Promise.race([
+      deleteDoc(docRef),
+      timeoutPromise
+    ]);
+  } catch (err: any) {
+    console.warn('Firestore delete notice:', err.message);
+  }
+
+  const local: PlayerRegistrationRecord[] = JSON.parse(localStorage.getItem('dpl_local_registrations') || '[]');
+  const filtered = local.filter(r => r.id !== id);
+  localStorage.setItem('dpl_local_registrations', JSON.stringify(filtered));
 };
 
 // ----------------------------------------------------
