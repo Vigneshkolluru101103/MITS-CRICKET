@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Trophy, UserPlus, ChevronRight, ShieldCheck, LogOut } from 'lucide-react';
+import { Menu, X, Trophy, UserPlus, ChevronRight, ShieldCheck } from 'lucide-react';
 import { Button } from '../ui/Button';
-import { AdminLoginModal } from '../auth/AdminLoginModal';
+import { useAuth } from '../../context/AuthContext';
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+
+  const { currentUser } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
@@ -24,19 +24,6 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    const auth = localStorage.getItem('dpl_admin_auth');
-    if (auth === 'true') {
-      setIsAdminLoggedIn(true);
-    }
-  }, []);
-
-  const handleAdminLogout = () => {
-    localStorage.removeItem('dpl_admin_auth');
-    localStorage.removeItem('dpl_admin_user');
-    setIsAdminLoggedIn(false);
-  };
-
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
@@ -48,6 +35,8 @@ export const Navbar: React.FC = () => {
     { name: 'Announcements', path: '/announcements' },
     { name: 'Contact', path: '/contact' },
   ];
+
+  const isLoggedIn = !!currentUser;
 
   return (
     <header
@@ -98,23 +87,13 @@ export const Navbar: React.FC = () => {
 
           {/* Right Action Buttons */}
           <div className="hidden lg:flex items-center gap-4">
-            {isAdminLoggedIn ? (
-              <div className="flex items-center gap-3">
-                <Link to="/admin/dashboard">
-                  <span className="px-3.5 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 text-xs font-mono font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.25)] hover:scale-105 transition-transform cursor-pointer">
-                    <ShieldCheck className="h-4 w-4 text-emerald-400" />
-                    ADMIN DASHBOARD
-                  </span>
-                </Link>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={handleAdminLogout}
-                  icon={<LogOut className="h-3.5 w-3.5" />}
-                >
-                  Logout
-                </Button>
-              </div>
+            {isLoggedIn ? (
+              <Link to="/admin/dashboard">
+                <span className="px-4 py-2 rounded-full bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 text-xs font-mono font-bold flex items-center gap-2 shadow-[0_0_12px_rgba(16,185,129,0.25)] hover:scale-105 transition-transform cursor-pointer">
+                  <ShieldCheck className="h-4 w-4 text-emerald-400" />
+                  ADMIN DASHBOARD
+                </span>
+              </Link>
             ) : (
               <Link to="/admin/login">
                 <Button
@@ -181,15 +160,17 @@ export const Navbar: React.FC = () => {
               })}
 
               <div className="pt-4 flex flex-col gap-3.5 border-t border-slate-800 mt-2">
-                {isAdminLoggedIn ? (
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-900 border border-emerald-500/30">
-                    <span className="text-xs font-mono text-emerald-300 font-bold flex items-center gap-1.5 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
-                      <ShieldCheck className="h-4 w-4 text-emerald-400" /> ADMIN LOGGED IN
-                    </span>
-                    <Button variant="secondary" size="sm" onClick={handleAdminLogout}>
-                      Logout
+                {isLoggedIn ? (
+                  <Link to="/admin/dashboard" onClick={() => setMobileMenuOpen(false)} className="w-full">
+                    <Button
+                      variant="secondary"
+                      size="md"
+                      icon={<ShieldCheck className="h-4 w-4 text-emerald-400" />}
+                      className="w-full border-emerald-500/40 text-emerald-300"
+                    >
+                      Admin Dashboard
                     </Button>
-                  </div>
+                  </Link>
                 ) : (
                   <Link to="/admin/login" onClick={() => setMobileMenuOpen(false)} className="w-full">
                     <Button
@@ -218,13 +199,6 @@ export const Navbar: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Admin Login Modal */}
-      <AdminLoginModal
-        isOpen={isAdminModalOpen}
-        onClose={() => setIsAdminModalOpen(false)}
-        onLoginSuccess={() => setIsAdminLoggedIn(true)}
-      />
     </header>
   );
 };

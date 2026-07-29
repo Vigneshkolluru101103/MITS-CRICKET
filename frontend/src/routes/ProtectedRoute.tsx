@@ -11,7 +11,7 @@ export const ProtectedRoute: React.FC = () => {
         <div className="flex flex-col items-center space-y-4">
           <div className="h-12 w-12 rounded-full border-4 border-[#D4AF37] border-t-transparent animate-spin" />
           <p className="text-xs font-mono text-[#D4AF37] tracking-widest uppercase">
-            Verifying Admin Credentials...
+            Verifying Authentication...
           </p>
         </div>
       </div>

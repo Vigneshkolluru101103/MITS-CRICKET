@@ -3,35 +3,22 @@ import type { User } from 'firebase/auth';
 import { loginWithEmail, logoutUser, onAuthChange } from '../firebase/auth';
 
 interface AuthContextType {
-  currentUser: User | { email: string; uid: string } | null;
+  currentUser: User | null;
   loading: boolean;
   login: (email: string, pass: string) => Promise<void>;
   logout: () => Promise<void>;
-  isAdminAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<User | { email: string; uid: string } | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // 1. Subscribe to Firebase Auth state
+    // Single, authoritative Firebase Auth state subscriber
     const unsubscribe = onAuthChange((user) => {
-      if (user) {
-        setCurrentUser(user);
-        localStorage.setItem('dpl_admin_auth', 'true');
-      } else {
-        // Fallback: check if local demo admin session exists
-        const localAuth = localStorage.getItem('dpl_admin_auth');
-        if (localAuth === 'true') {
-          const userEmail = localStorage.getItem('dpl_admin_user') || 'admin@mitsdpl.in';
-          setCurrentUser({ email: userEmail, uid: 'local-admin-uid' });
-        } else {
-          setCurrentUser(null);
-        }
-      }
+      setCurrentUser(user);
       setLoading(false);
     });
 
@@ -41,20 +28,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, pass: string): Promise<void> => {
     setLoading(true);
     try {
-      // Attempt Firebase Authentication
       const user = await loginWithEmail(email, pass);
       setCurrentUser(user);
-      localStorage.setItem('dpl_admin_auth', 'true');
     } catch (err: any) {
-      // Fallback for local demo admin if Firebase project credentials aren't deployed yet
-      if ((email.trim().toLowerCase() === 'admin' || email === 'admin@mitsdpl.in') && (pass === 'dpl2026' || pass === 'admin')) {
-        const mockUser = { email: 'admin@mitsdpl.in', uid: 'local-admin-uid' };
-        setCurrentUser(mockUser);
-        localStorage.setItem('dpl_admin_auth', 'true');
-        localStorage.setItem('dpl_admin_user', email);
-      } else {
-        throw new Error(err.message || 'Failed to sign in. Please verify your credentials.');
-      }
+      throw new Error(err.message || 'Failed to sign in. Please verify your credentials.');
     } finally {
       setLoading(false);
     }
@@ -64,20 +41,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(true);
     try {
       await logoutUser();
-    } catch {
-      // Ignore firebase logout error if local user
+    } catch (err) {
+      console.error('Firebase signOut error:', err);
     } finally {
-      localStorage.removeItem('dpl_admin_auth');
-      localStorage.removeItem('dpl_admin_user');
+      // Clear all client-side storage
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // Reset state immediately
       setCurrentUser(null);
       setLoading(false);
     }
   };
 
-  const isAdminAuthenticated = !!currentUser;
-
   return (
-    <AuthContext.Provider value={{ currentUser, loading, login, logout, isAdminAuthenticated }}>
+    <AuthContext.Provider value={{ currentUser, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

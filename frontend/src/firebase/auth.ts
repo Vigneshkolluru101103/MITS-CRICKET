@@ -2,9 +2,16 @@ import {
   signInWithEmailAndPassword, 
   signOut, 
   onAuthStateChanged, 
+  setPersistence,
+  browserLocalPersistence,
   type User 
 } from 'firebase/auth';
 import { auth } from './config';
+
+// Ensure standard browser local persistence
+setPersistence(auth, browserLocalPersistence).catch((err) => {
+  console.warn('Firebase persistence warning:', err);
+});
 
 export const loginWithEmail = async (email: string, pass: string): Promise<User> => {
   const userCredential = await signInWithEmailAndPassword(auth, email, pass);

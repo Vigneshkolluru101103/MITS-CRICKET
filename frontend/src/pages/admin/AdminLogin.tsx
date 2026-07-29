@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Lock, User, Eye, EyeOff, KeyRound, AlertCircle } from 'lucide-react';
@@ -13,8 +13,22 @@ export const AdminLogin: React.FC = () => {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { login } = useAuth();
+  const { currentUser, loading, login } = useAuth();
   const navigate = useNavigate();
+
+  // Reset form inputs & errors on mount and location change
+  useEffect(() => {
+    setEmail('');
+    setPassword('');
+    setError('');
+  }, []);
+
+  // If already authenticated, redirect to dashboard immediately
+  useEffect(() => {
+    if (!loading && currentUser) {
+      navigate('/admin/dashboard', { replace: true });
+    }
+  }, [currentUser, loading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,14 +36,25 @@ export const AdminLogin: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      await login(email, password);
-      navigate('/admin/dashboard');
+      await login(email.trim(), password);
+      // Clear inputs upon successful login
+      setEmail('');
+      setPassword('');
+      navigate('/admin/dashboard', { replace: true });
     } catch (err: any) {
-      setError(err.message || 'Invalid login credentials.');
+      setError(err.message || 'Invalid admin credentials.');
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-[85vh] flex items-center justify-center pt-28 pb-20">
+        <div className="h-10 w-10 rounded-full border-4 border-[#D4AF37] border-t-transparent animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center pt-28 pb-20 px-4">
@@ -66,7 +91,11 @@ export const AdminLogin: React.FC = () => {
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} autoComplete="off" className="space-y-4">
+          {/* Hidden inputs to prevent aggressive browser password manager autofill */}
+          <input type="text" name="prevent_autofill_email" style={{ display: 'none' }} tabIndex={-1} />
+          <input type="password" name="prevent_autofill_password" style={{ display: 'none' }} tabIndex={-1} />
+
           <div>
             <label className="block text-xs font-mono font-bold text-slate-300 uppercase mb-1.5">
               Admin Email / Username
@@ -75,10 +104,12 @@ export const AdminLogin: React.FC = () => {
               <User className="h-4 w-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
+                name="admin_login_email"
+                autoComplete="off"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@mitsdpl.in"
+                placeholder="Enter admin email"
                 className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:border-[#D4AF37] focus:outline-none text-sm font-mono"
               />
             </div>
@@ -92,6 +123,8 @@ export const AdminLogin: React.FC = () => {
               <Lock className="h-4 w-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type={showPassword ? 'text' : 'password'}
+                name="admin_login_password"
+                autoComplete="new-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -107,7 +140,6 @@ export const AdminLogin: React.FC = () => {
               </button>
             </div>
           </div>
-
 
           <div className="pt-2">
             <Button

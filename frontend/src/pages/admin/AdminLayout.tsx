@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
+import { Link, useLocation, Outlet } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Users, 
@@ -12,11 +12,20 @@ import { Button } from '../../components/ui/Button';
 export const AdminLayout: React.FC = () => {
   const { currentUser, logout } = useAuth();
   const location = useLocation();
-  const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    await logout();
-    navigate('/admin/login');
+  const handleLogout = async (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    try {
+      await logout();
+    } catch (err) {
+      console.error('Logout failed:', err);
+    } finally {
+      // Force immediate clean navigation to login page resetting all state
+      window.location.href = '/admin/login';
+    }
   };
 
   const navItems = [
@@ -45,7 +54,7 @@ export const AdminLayout: React.FC = () => {
           </div>
         </div>
 
-        {/* Navigation Tabs */}
+        {/* Navigation Tabs & Single Red Logout Button */}
         <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
@@ -63,7 +72,9 @@ export const AdminLayout: React.FC = () => {
             );
           })}
 
+          {/* Single Official Red Logout Button */}
           <Button
+            type="button"
             variant="crimson"
             size="sm"
             onClick={handleLogout}
