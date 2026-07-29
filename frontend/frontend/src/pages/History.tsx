@@ -298,50 +298,6 @@ export const History: React.FC = () => {
             )}
           </div>
         </div>
-
-        {/* 1B. ALL 29 PHOTOS GRID THUMBNAIL GALLERY (MOBILE & DESKTOP) */}
-        <div className="space-y-4 pt-4">
-          <div className="flex items-center justify-between px-2">
-            <h3 className="text-lg sm:text-xl font-bold text-white font-display flex items-center gap-2">
-              <ImageIcon className="h-5 w-5 text-emerald-400" />
-              <span>Full Photo Gallery ({galleryImages.length} Photos)</span>
-            </h3>
-            <span className="text-xs text-slate-400">Tap thumbnail to view</span>
-          </div>
-
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2.5 max-h-[360px] overflow-y-auto p-2 bg-slate-950/60 rounded-2xl border border-slate-800/80 custom-scrollbar">
-            {galleryImages.map((img, index) => {
-              const isActive = index === currentSlideIndex;
-              return (
-                <button
-                  key={img.id}
-                  onClick={() => setCurrentSlideIndex(index)}
-                  className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all cursor-pointer group ${isActive
-                      ? 'border-emerald-400 scale-95 ring-2 ring-emerald-400/40 shadow-lg'
-                      : 'border-slate-800 opacity-70 hover:opacity-100 hover:border-slate-600'
-                    }`}
-                  aria-label={`View photo ${index + 1}: ${img.title}`}
-                >
-                  <img
-                    src={img.url}
-                    alt={img.title}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    onError={(e) => {
-                      const target = e.currentTarget;
-                      if (target.src.includes('/images/')) {
-                        target.src = target.src.replace('/images/', '/');
-                      }
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-1">
-                    <span className="text-[10px] text-white font-mono font-bold">#{index + 1}</span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
       </div>
 
 

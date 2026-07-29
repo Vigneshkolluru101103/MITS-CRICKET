@@ -40,12 +40,12 @@ export const History: React.FC = () => {
     },
     {
       id: 7,
-      title: 'MITS Tournament Captains & Leaders Lineup 2025',
+      title: 'MITS FAST BOWLING LINE UP',
       url: '/images/mits_captains_lineup_2025.jpg',
     },
     {
       id: 8,
-      title: 'MITS Captains Trio 2025',
+      title: ' Trio ',
       url: '/images/mits_trio_captains_2025.jpg',
     },
     {
@@ -70,12 +70,12 @@ export const History: React.FC = () => {
     },
     {
       id: 13,
-      title: 'RED TEAM Vignesh Cover Drive 2025',
+      title: 'RED TEAM Suman Cover Drive 2025',
       url: '/images/vignesh_frontfoot_drive_2025.jpg',
     },
     {
       id: 14,
-      title: 'BLUE TEAM Openers Ricky & Sunny Walk To Pitch 2025',
+      title: 'BLUE TEAM Openers Ricky & Harsha Walk To Pitch 2025',
       url: '/images/blue_team_batsmen_walking_2025.jpg',
     },
     {
@@ -105,7 +105,7 @@ export const History: React.FC = () => {
     },
     {
       id: 20,
-      title: 'MITS Captain On-Field Strategy & Directing Play 2025',
+      title: 'Strategy & Directing Play 2025',
       url: '/images/captain_field_setting_2025.jpg',
     },
     {
@@ -120,7 +120,7 @@ export const History: React.FC = () => {
     },
     {
       id: 23,
-      title: 'MITS Captains & Leaders Perspective Lineup 2025',
+      title: 'MITS Pace Attack',
       url: '/images/mits_captains_depth_lineup_2025.jpg',
     },
     {
@@ -219,7 +219,7 @@ export const History: React.FC = () => {
         </div>
 
         {/* Full Width Image Display with Touch Swipe for Mobile */}
-        <div 
+        <div
           className="relative rounded-3xl overflow-hidden border border-slate-800 bg-slate-950 shadow-2xl group touch-pan-y select-none"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
@@ -296,51 +296,6 @@ export const History: React.FC = () => {
                 </button>
               </>
             )}
-          </div>
-        </div>
-
-        {/* 1B. ALL 29 PHOTOS GRID THUMBNAIL GALLERY (MOBILE & DESKTOP) */}
-        <div className="space-y-4 pt-4">
-          <div className="flex items-center justify-between px-2">
-            <h3 className="text-lg sm:text-xl font-bold text-white font-display flex items-center gap-2">
-              <ImageIcon className="h-5 w-5 text-emerald-400" />
-              <span>Full Photo Gallery ({galleryImages.length} Photos)</span>
-            </h3>
-            <span className="text-xs text-slate-400">Tap thumbnail to view</span>
-          </div>
-
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2.5 max-h-[360px] overflow-y-auto p-2 bg-slate-950/60 rounded-2xl border border-slate-800/80 custom-scrollbar">
-            {galleryImages.map((img, index) => {
-              const isActive = index === currentSlideIndex;
-              return (
-                <button
-                  key={img.id}
-                  onClick={() => setCurrentSlideIndex(index)}
-                  className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all cursor-pointer group ${
-                    isActive 
-                      ? 'border-emerald-400 scale-95 ring-2 ring-emerald-400/40 shadow-lg' 
-                      : 'border-slate-800 opacity-70 hover:opacity-100 hover:border-slate-600'
-                  }`}
-                  aria-label={`View photo ${index + 1}: ${img.title}`}
-                >
-                  <img
-                    src={img.url}
-                    alt={img.title}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    onError={(e) => {
-                      const target = e.currentTarget;
-                      if (target.src.includes('/images/')) {
-                        target.src = target.src.replace('/images/', '/');
-                      }
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-1">
-                    <span className="text-[10px] text-white font-mono font-bold">#{index + 1}</span>
-                  </div>
-                </button>
-              );
-            })}
           </div>
         </div>
       </div>
