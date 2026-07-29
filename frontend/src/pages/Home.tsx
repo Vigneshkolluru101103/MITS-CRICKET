@@ -37,7 +37,7 @@ export const Home: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight font-display max-w-5xl mx-auto leading-[1.05]"
           >
-            WELCOME TO THE <span className="gradient-text-gold">DPL 2026</span>
+            WELCOME TO THE <span className="gradient-text-gold">DPL S1 2026</span>
           </motion.h1>
 
           <motion.p
