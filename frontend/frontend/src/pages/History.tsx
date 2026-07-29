@@ -40,12 +40,12 @@ export const History: React.FC = () => {
     },
     {
       id: 7,
-      title: 'MITS Tournament Captains & Leaders Lineup 2025',
+      title: 'MITS FAST BOWLING LINE UP',
       url: '/images/mits_captains_lineup_2025.jpg',
     },
     {
       id: 8,
-      title: 'MITS Captains Trio 2025',
+      title: ' Trio ',
       url: '/images/mits_trio_captains_2025.jpg',
     },
     {
@@ -70,12 +70,12 @@ export const History: React.FC = () => {
     },
     {
       id: 13,
-      title: 'RED TEAM Vignesh Cover Drive 2025',
+      title: 'RED TEAM Suman Cover Drive 2025',
       url: '/images/vignesh_frontfoot_drive_2025.jpg',
     },
     {
       id: 14,
-      title: 'BLUE TEAM Openers Ricky & Sunny Walk To Pitch 2025',
+      title: 'BLUE TEAM Openers Ricky & Harsha Walk To Pitch 2025',
       url: '/images/blue_team_batsmen_walking_2025.jpg',
     },
     {
@@ -105,7 +105,7 @@ export const History: React.FC = () => {
     },
     {
       id: 20,
-      title: 'MITS Captain On-Field Strategy & Directing Play 2025',
+      title: 'Strategy & Directing Play 2025',
       url: '/images/captain_field_setting_2025.jpg',
     },
     {
@@ -120,7 +120,7 @@ export const History: React.FC = () => {
     },
     {
       id: 23,
-      title: 'MITS Captains & Leaders Perspective Lineup 2025',
+      title: 'MITS Pace Attack',
       url: '/images/mits_captains_depth_lineup_2025.jpg',
     },
     {
@@ -219,7 +219,7 @@ export const History: React.FC = () => {
         </div>
 
         {/* Full Width Image Display with Touch Swipe for Mobile */}
-        <div 
+        <div
           className="relative rounded-3xl overflow-hidden border border-slate-800 bg-slate-950 shadow-2xl group touch-pan-y select-none"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
@@ -316,11 +316,10 @@ export const History: React.FC = () => {
                 <button
                   key={img.id}
                   onClick={() => setCurrentSlideIndex(index)}
-                  className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all cursor-pointer group ${
-                    isActive 
-                      ? 'border-emerald-400 scale-95 ring-2 ring-emerald-400/40 shadow-lg' 
+                  className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all cursor-pointer group ${isActive
+                      ? 'border-emerald-400 scale-95 ring-2 ring-emerald-400/40 shadow-lg'
                       : 'border-slate-800 opacity-70 hover:opacity-100 hover:border-slate-600'
-                  }`}
+                    }`}
                   aria-label={`View photo ${index + 1}: ${img.title}`}
                 >
                   <img
