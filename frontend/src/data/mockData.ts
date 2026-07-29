@@ -25,58 +25,22 @@ export const TeamsList = [
 export const SponsorsData: Sponsor[] = [
   {
     id: 's1',
-    name: 'Apollo Tyres & Auto',
+    name: 'Vidya Sagar',
     tier: 'TITLE',
-    logo: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=300&auto=format&fit=crop&q=80',
-    tagline: 'Official Title Sponsor of DPL Season 1',
-    website: 'https://example.com',
-    description: 'Empowering sports performance & excellence across nationwide tournaments.'
+    logo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+    tagline: 'Valued Sponsor',
+    website: '#',
+    description: 'Generous supporter of DPL 2026 collegiate cricket tournament.'
   },
   {
     id: 's2',
-    name: 'Red Bull Energy',
+    name: 'Satish',
     tier: 'POWERED_BY',
-    logo: 'https://images.unsplash.com/photo-1527661591475-527312dd65f5?w=300&auto=format&fit=crop&q=80',
-    tagline: 'Energy Partner',
-    website: 'https://example.com',
-    description: 'Fueling champions with maximum energy and tactical speed.'
+    logo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80',
+    tagline: 'Valued Sponsor',
+    website: '#',
+    description: 'Empowering sports excellence and youth development.'
   },
-  {
-    id: 's3',
-    name: 'SG Cricket Equipment',
-    tier: 'GOLD',
-    logo: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=300&auto=format&fit=crop&q=80',
-    tagline: 'Official Kit & Ball Partner',
-    website: 'https://example.com',
-    description: 'Premium match balls, bats, and player gear for high-grade performance.'
-  },
-  {
-    id: 's4',
-    name: 'Decathlon Sports',
-    tier: 'GOLD',
-    logo: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=300&auto=format&fit=crop&q=80',
-    tagline: 'Sports Merchandise Partner',
-    website: 'https://example.com',
-    description: 'Providing official jerseys, boundary cushions & training gear.'
-  },
-  {
-    id: 's5',
-    name: 'FreshBites Cafe DILMAN',
-    tier: 'SILVER',
-    logo: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=300&auto=format&fit=crop&q=80',
-    tagline: 'Hydration & Nutrition Partner',
-    website: 'https://example.com',
-    description: 'Refreshing players & spectators throughout the tournament.'
-  },
-  {
-    id: 's6',
-    name: 'CricHeroes',
-    tier: 'PARTNER',
-    logo: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=300&auto=format&fit=crop&q=80',
-    tagline: 'Official Scoring & Live Stream Partner',
-    website: CricHeroesConfig.liveUrl,
-    description: 'Ball-by-ball digital scoring, player stats, and high-definition video streaming.'
-  }
 ];
 
 export const CommitteeMembersData: CommitteeMember[] = [

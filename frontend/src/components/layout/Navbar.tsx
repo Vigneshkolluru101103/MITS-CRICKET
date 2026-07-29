@@ -23,7 +23,7 @@ export const Navbar: React.FC = () => {
 
   const navLinks = [
     { name: 'Home', path: '/' },
-    { name: 'About DPL', path: '/about' },
+    { name: 'About', path: '/about' },
     { name: 'Tournament', path: '/tournament' },
     { name: 'Register', path: '/register' },
     { name: 'History', path: '/history' },
@@ -35,11 +35,10 @@ export const Navbar: React.FC = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
           ? 'bg-[#0a0d14]/90 backdrop-blur-xl border-b border-slate-800/70 py-3 shadow-2xl shadow-black/50'
           : 'bg-transparent py-5'
-      }`}
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
@@ -68,9 +67,8 @@ export const Navbar: React.FC = () => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`relative px-3 py-1.5 text-xs xl:text-sm font-medium transition-colors ${
-                    isActive ? 'text-[#E2C889] font-semibold' : 'text-slate-300 hover:text-white'
-                  }`}
+                  className={`relative px-3 py-1.5 text-xs xl:text-sm font-medium transition-colors ${isActive ? 'text-[#E2C889] font-semibold' : 'text-slate-300 hover:text-white'
+                    }`}
                 >
                   {isActive && (
                     <motion.div
@@ -128,11 +126,10 @@ export const Navbar: React.FC = () => {
                     key={link.path}
                     to={link.path}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center justify-between px-4 py-3 rounded-xl border text-sm font-medium transition-all ${
-                      isActive
+                    className={`flex items-center justify-between px-4 py-3 rounded-xl border text-sm font-medium transition-all ${isActive
                         ? 'bg-[#C5A059]/10 border-[#C5A059]/30 text-[#E2C889] font-bold'
                         : 'border-slate-800/80 text-slate-300 hover:bg-slate-900'
-                    }`}
+                      }`}
                   >
                     <span>{link.name}</span>
                     <ChevronRight className="h-4 w-4 text-slate-500" />

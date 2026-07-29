@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Download, Mail, Send, Sparkles } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { SponsorsData } from '../data/mockData';
 import { SponsorCard } from '../components/cards/SponsorCard';
-import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
 import { ToastContainer, type ToastMessage } from '../components/ui/Toast';
@@ -32,61 +31,19 @@ export const Sponsors: React.FC = () => {
   };
 
   return (
-    <div className="pt-28 pb-20 space-y-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="pt-28 pb-20 space-y-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <ToastContainer toasts={toasts} onDismiss={(id) => setToasts(t => t.filter(x => x.id !== id))} />
 
       {/* Header */}
-      <div className="text-center max-w-3xl mx-auto space-y-4">
-        <Badge variant="gold" icon={<Sparkles className="h-3.5 w-3.5" />}>Corporate Partnerships</Badge>
-        <h1 className="text-4xl sm:text-6xl font-black text-white font-display tracking-tight">
-          OFFICIAL <span className="gradient-text-gold">SPONSORS</span>
+      <div className="text-center max-w-3xl mx-auto py-4">
+        <h1 className="text-4xl sm:text-6xl font-black text-[#00d2ff] font-display tracking-tight drop-shadow-[0_0_20px_rgba(0,210,255,0.4)]">
+          Our Valued Sponsors
         </h1>
-        <p className="text-slate-300 text-base sm:text-lg">
-          Empowering youth athletic excellence. Meet the premier corporate partners driving MITS Premier League Season 7.
-        </p>
       </div>
 
-      {/* Sponsor Pitch Kit Banner */}
-      <div className="glass-panel-gold p-8 sm:p-12 rounded-3xl border border-[#C5A059]/30 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
-        <div className="space-y-3 text-center md:text-left">
-          <Badge variant="gold">Partner With MPL</Badge>
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-white font-display">
-            Interested in Becoming a Season 7 Sponsor?
-          </h3>
-          <p className="text-slate-300 text-sm max-w-xl">
-            Gain high-visibility brand exposure across 1,500+ stadium spectators, 15,000+ CricHeroes viewers, social campaigns, and jersey branding.
-          </p>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
-          <Button
-            variant="gold"
-            size="lg"
-            icon={<Mail className="h-5 w-5" />}
-            onClick={() => setShowInquiryModal(true)}
-            glow
-          >
-            Sponsor Inquiry
-          </Button>
-
-          <Button
-            variant="secondary"
-            size="lg"
-            icon={<Download className="h-5 w-5" />}
-            onClick={() => alert("Downloading MPL Season 7 Official Partnership Pitch Deck (PDF)...")}
-          >
-            Download Pitch Deck
-          </Button>
-        </div>
-      </div>
-
-      {/* Sponsors Grid */}
-      <div className="space-y-8">
-        <h3 className="text-2xl font-bold text-white font-display border-b border-slate-800 pb-3">
-          Season 7 Official Partners Showcase
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Sponsors Grid (Vidya Sagar & Satish) */}
+      <div className="max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {SponsorsData.map((sponsor) => (
             <SponsorCard key={sponsor.id} sponsor={sponsor} />
           ))}
