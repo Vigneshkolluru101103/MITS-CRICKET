@@ -14,7 +14,7 @@ export const SponsorCard: React.FC<SponsorCardProps> = ({ sponsor }) => {
       viewport={{ once: true }}
       whileHover={{ y: -6 }}
       transition={{ duration: 0.4 }}
-      className="bg-slate-900/80 backdrop-blur-md rounded-[20px] p-8 border border-slate-800/80 shadow-xl hover:border-emerald-500/40 hover:shadow-2xl hover:shadow-emerald-500/5 transition-all duration-300 flex flex-col items-center text-center group"
+      className="bg-slate-900/80 backdrop-blur-md rounded-[20px] p-6 sm:p-8 border border-slate-800/80 shadow-xl hover:border-emerald-500/40 hover:shadow-2xl hover:shadow-emerald-500/5 transition-all duration-300 flex flex-col items-center text-center group"
     >
       {/* Sponsor Photo */}
       <div className="w-[140px] h-[140px] rounded-[12px] overflow-hidden mb-6 border border-slate-700/60 shadow-md group-hover:border-emerald-400/50 transition-colors">

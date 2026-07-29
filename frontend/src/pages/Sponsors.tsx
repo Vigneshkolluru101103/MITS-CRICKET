@@ -11,13 +11,13 @@ export const Sponsors: React.FC = () => {
           Our <span className="text-emerald-400">Valued Sponsors</span>
         </h1>
         <p className="text-slate-400 text-base sm:text-lg leading-relaxed">
-          We sincerely thank our sponsors for supporting the MITS Premier League.
+          We sincerely thank our sponsors for supporting the DPL Premier League.
         </p>
       </div>
 
-      {/* Responsive Sponsors Grid */}
+      {/* Responsive Sponsors Grid - 3 cards side by side in the same line */}
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           {sponsorsData.map((sponsor) => (
             <SponsorCard key={sponsor.id} sponsor={sponsor} />
           ))}
