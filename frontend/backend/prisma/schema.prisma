@@ -1,0 +1,68 @@
+// Prisma Schema for MITS Premier League (MPL)
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum PlayerCategory {
+  STUDENT
+  ALUMNI
+}
+
+enum PlayerRole {
+  BATSMAN
+  BOWLER
+  ALL_ROUNDER
+  WICKET_KEEPER
+  WICKET_KEEPER_BATSMAN
+}
+
+enum RegistrationStatus {
+  PENDING
+  VERIFIED
+  APPROVED
+  REJECTED
+}
+
+model Player {
+  id              String             @id @default(uuid())
+  fullName        String
+  email           String             @unique
+  phone           String
+  category        PlayerCategory
+  rollNo          String?            // Required for active students
+  batchYear       String             // Graduation year for alumni / passout year
+  department      String
+  role            PlayerRole
+  battingStyle    String?
+  bowlingStyle    String?
+  pastMatchStats  String?
+  profileImage    String?
+  paymentStatus   String             @default("PENDING")
+  status          RegistrationStatus @default(PENDING")
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+}
+
+model Sponsor {
+  id          String   @id @default(uuid())
+  name        String
+  tier        String   // TITLE, GOLD, SILVER, PARTNER
+  logoUrl     String
+  websiteUrl  String?
+  description String?
+  createdAt   DateTime @default(now())
+}
+
+model Announcement {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  category  String   // AUCTION, SCHEDULE, RULES, GENERAL
+  date      DateTime @default(now())
+  important Boolean  @default(false)
+}

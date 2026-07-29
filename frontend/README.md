@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
@@ -30,3 +31,33 @@ If you are developing a production application, we recommend enabling type-aware
 ```
 
 See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+=======
+# DILMAN Premier League (DPL) - Official Web Platform
+
+The official digital platform for **DILMAN Premier League (DPL)**, featuring player registrations (Active Students & Alumni), tournament schedules, committee information, sponsor tiers, video gallery, and live stream redirects to CricHeroes.
+
+## Repository Structure
+
+```
+dilman-premier-league/
+├── frontend/             # Production React 19 + TypeScript + Vite + Tailwind CSS + Framer Motion
+├── backend/              # Node.js + Express + Prisma + PostgreSQL (Backend scaffold)
+└── README.md
+```
+
+## Quick Start (Frontend)
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The app will launch at `http://localhost:5173`.
+
+## Core Features
+- **Aesthetic Luxury Sports Design**: Dark mode aesthetic with champagne gold & metallic accents.
+- **Player Registration**: Multi-step interactive form with Zod validation, role selection, photo preview, and digital player pass generator.
+- **CricHeroes Integration**: Prominent CTAs for live score tracking & streaming on CricHeroes.
+- **Dynamic Content**: Countdown timer, interactive sponsor pitch kit, filterable gallery, rules & regulations viewer, committee directory, and news timeline.
+>>>>>>> 7bbff3c5784eb3b956eb771ebfa9a170da3e4342
