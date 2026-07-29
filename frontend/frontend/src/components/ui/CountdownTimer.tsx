@@ -9,8 +9,8 @@ interface CountdownTimerProps {
 
 export const CountdownTimer: React.FC<CountdownTimerProps> = ({
   targetDate,
-  title = "COUNTDOWN TO SEASON 7 GRAND AUCTION",
-  subtitle = "MITS Main Auditorium & Live Broadcast"
+  title = "COUNTDOWN TO DPL 2026 GRAND AUCTION",
+  subtitle,
 }) => {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -49,7 +49,7 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
   return (
     <div className="relative rounded-2xl glass-panel p-6 md:p-8 border border-[#C5A059]/20 text-center max-w-3xl mx-auto shadow-xl overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-[#C5A059]/5 via-transparent to-[#C5A059]/5 pointer-events-none" />
-      
+
       <p className="text-[11px] font-mono font-bold tracking-widest text-[#E2C889] uppercase mb-1">
         {title}
       </p>

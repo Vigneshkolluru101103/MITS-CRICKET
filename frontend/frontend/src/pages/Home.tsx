@@ -37,7 +37,7 @@ export const Home: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight font-display max-w-5xl mx-auto leading-[1.05]"
           >
-            WELCOME TO THE <span className="gradient-text-gold">DPL S1 2026</span>
+            WELCOME TO THE <span className="gradient-text-gold">DPL 2026</span>
           </motion.h1>
 
           <motion.p
@@ -162,7 +162,7 @@ export const Home: React.FC = () => {
               <ul className="mt-6 space-y-2.5 text-xs sm:text-sm text-slate-200">
                 <li className="flex items-center gap-2">
                   <div className="h-1.5 w-1.5 rounded-full bg-[#E2C889]" />
-                  <span>₹400 Registration fee for Active Students and ₹1000 for Alumni students</span>
+                  <span>₹400 Registration fee for Active Students and ₹1000 for Alumini</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <div className="h-1.5 w-1.5 rounded-full bg-[#E2C889]" />
