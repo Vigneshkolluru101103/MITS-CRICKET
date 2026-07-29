@@ -37,11 +37,10 @@ export const Announcements: React.FC = () => {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap ${
-                selectedCategory === cat
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap ${selectedCategory === cat
                   ? 'bg-gradient-to-r from-[#D5B266] to-[#C59B4E] text-slate-950 shadow-md'
                   : 'text-slate-400 hover:text-white'
-              }`}
+                }`}
             >
               {cat}
             </button>

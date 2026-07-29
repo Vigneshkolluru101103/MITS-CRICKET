@@ -10,6 +10,8 @@ import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
 import { ToastContainer, type ToastMessage } from '../components/ui/Toast';
+import { uploadToCloudinary } from '../utils/cloudinary';
+import { addRegistrationToFirestore } from '../firebase/firestore';
 
 const registrationSchema = z.object({
   fullName: z.string().min(3, 'Full name must be at least 3 characters'),
@@ -45,9 +47,11 @@ type FormValues = {
 
 export const Register: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const [paymentProofPreview, setPaymentProofPreview] = useState<string | null>(null);
+  const [paymentProofFile, setPaymentProofFile] = useState<File | null>(null);
+  const [isSubmittingFirebase, setIsSubmittingFirebase] = useState<boolean>(false);
   const [submittedData, setSubmittedData] = useState<PlayerRegistrationData | null>(null);
   const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
-  const [paymentProofPreview, setPaymentProofPreview] = useState<string | null>(null);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
   const addToast = (type: 'success' | 'error' | 'info', title: string, description?: string) => {
@@ -110,6 +114,7 @@ export const Register: React.FC = () => {
   const handleScreenshotUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setPaymentProofFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setPaymentProofPreview(reader.result as string);
@@ -124,26 +129,53 @@ export const Register: React.FC = () => {
     addToast('info', 'UPI Number Copied', '6380526866 copied to clipboard.');
   };
 
-  const onSubmit = (data: FormValues) => {
-    if (!paymentProofPreview) {
+  const onSubmit = async (data: FormValues) => {
+    if (!paymentProofPreview && !paymentProofFile) {
       addToast('error', 'Payment Screenshot Required', 'Please upload a clear screenshot of your payment.');
       return;
     }
 
-    const registrationPass: PlayerRegistrationData = {
-      ...data,
-      role: data.role as any,
-      highestLevel: 'College Cricket',
-      pastMatchStats: 'N/A',
-      id: `DPL-S1-${Math.floor(1000 + Math.random() * 9000)}`,
-      profileImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
-      createdAt: new Date().toLocaleDateString(),
-    };
+    setIsSubmittingFirebase(true);
+    addToast('info', 'Processing Registration', 'Uploading payment receipt to Cloudinary and saving record...');
 
-    setSubmittedData(registrationPass);
-    setShowConfirmationModal(true);
-    confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-    addToast('success', 'Registration Successful!', 'Your registration details have been submitted.');
+    try {
+      let downloadUrl = '';
+      if (paymentProofFile) {
+        downloadUrl = await uploadToCloudinary(paymentProofFile);
+      }
+
+      const docId = await addRegistrationToFirestore({
+        name: data.fullName,
+        phone: data.phone,
+        email: data.email,
+        branch: data.department || data.category,
+        year: data.batchYear,
+        section: 'A',
+        jerseyName: data.fullName,
+        transactionId: data.utrId,
+        paymentScreenshotUrl: downloadUrl || paymentProofPreview || '',
+        status: 'Pending',
+      });
+
+      const registrationPass: PlayerRegistrationData = {
+        ...data,
+        role: data.role as any,
+        highestLevel: 'College Cricket',
+        pastMatchStats: 'N/A',
+        id: `DPL-${docId.substring(0, 6).toUpperCase()}`,
+        profileImage: downloadUrl || 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
+        createdAt: new Date().toLocaleDateString(),
+      };
+
+      setSubmittedData(registrationPass);
+      setShowConfirmationModal(true);
+      confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+      addToast('success', 'Registration Successful!', 'Receipt uploaded to Cloudinary & entry saved in Cloud Firestore.');
+    } catch (err: any) {
+      addToast('error', 'Registration Error', err.message || 'Failed to complete registration.');
+    } finally {
+      setIsSubmittingFirebase(false);
+    }
   };
 
   return (
@@ -170,10 +202,10 @@ export const Register: React.FC = () => {
           <div key={step} className="flex items-center gap-2">
             <div
               className={`flex h-9 w-9 items-center justify-center rounded-xl font-mono text-sm font-bold transition-all ${currentStep === step
-                  ? 'bg-gradient-to-r from-[#D5B266] to-[#C59B4E] text-slate-950 shadow-md border border-[#E2C889]/30'
-                  : currentStep > step
-                    ? 'bg-emerald-950/40 text-emerald-400 border border-emerald-800/40'
-                    : 'bg-slate-900 text-slate-500 border border-slate-800'
+                ? 'bg-gradient-to-r from-[#D5B266] to-[#C59B4E] text-slate-950 shadow-md border border-[#E2C889]/30'
+                : currentStep > step
+                  ? 'bg-emerald-950/40 text-emerald-400 border border-emerald-800/40'
+                  : 'bg-slate-900 text-slate-500 border border-slate-800'
                 }`}
             >
               {currentStep > step ? <Check className="h-4 w-4" /> : step}
@@ -203,8 +235,8 @@ export const Register: React.FC = () => {
               <label
                 onClick={() => setValue('category', 'STUDENT', { shouldValidate: true })}
                 className={`p-6 rounded-2xl border cursor-pointer transition-all flex flex-col justify-between space-y-4 ${selectedCategory === 'STUDENT'
-                    ? 'bg-[#C5A059]/10 border-[#C5A059]/50 text-white shadow-lg'
-                    : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:border-slate-700'
+                  ? 'bg-[#C5A059]/10 border-[#C5A059]/50 text-white shadow-lg'
+                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:border-slate-700'
                   }`}
               >
                 <div className="flex items-center justify-between">
@@ -220,8 +252,8 @@ export const Register: React.FC = () => {
               <label
                 onClick={() => setValue('category', 'ALUMNI', { shouldValidate: true })}
                 className={`p-6 rounded-2xl border cursor-pointer transition-all flex flex-col justify-between space-y-4 ${selectedCategory === 'ALUMNI'
-                    ? 'bg-[#C5A059]/10 border-[#C5A059]/50 text-white shadow-lg'
-                    : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:border-slate-700'
+                  ? 'bg-[#C5A059]/10 border-[#C5A059]/50 text-white shadow-lg'
+                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:border-slate-700'
                   }`}
               >
                 <div className="flex items-center justify-between">
@@ -588,12 +620,12 @@ export const Register: React.FC = () => {
           ) : (
             <Button
               type="submit"
-              variant="gold"
+              variant="primary"
               size="lg"
+              disabled={isSubmittingFirebase}
               icon={<CheckCircle2 className="h-5 w-5" />}
-              glow
             >
-              REGISTER NOW
+              {isSubmittingFirebase ? 'SAVING TO FIRESTORE...' : 'REGISTER NOW'}
             </Button>
           )}
         </div>

@@ -8,10 +8,10 @@ export const Sponsors: React.FC = () => {
       {/* Section Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <h1 className="text-3xl sm:text-5xl font-black text-white font-display tracking-tight">
-          Our <span className="text-emerald-400">Valued Sponsors</span>
+          Our <span className="text-emerald-400">OFFICIALS & SPONSORS</span>
         </h1>
         <p className="text-slate-400 text-base sm:text-lg leading-relaxed">
-          We sincerely thank our OFFICIALS & SPONSORS
+
         </p>
       </div>
 

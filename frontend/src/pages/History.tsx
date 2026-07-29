@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  Trophy, 
-  Image as ImageIcon, 
-  CheckCircle2, 
-  ExternalLink 
+import {
+  ChevronLeft,
+  ChevronRight,
+  Trophy,
+  Image as ImageIcon
 } from 'lucide-react';
 
 export const History: React.FC = () => {
@@ -17,13 +15,13 @@ export const History: React.FC = () => {
   const galleryImages = [
     {
       id: 1,
-      title: 'RED TEAM 2025 Champions Trophy Presentation',
-      url: '/images/red_team_trophy_trio_2025.jpg',
+      title: 'MITS Tournament Stars & Captains 2025',
+      url: '/images/mits_stars_group_2025.jpg',
     },
     {
       id: 2,
-      title: 'MITS Tournament Stars & Captains 2025',
-      url: '/images/mits_stars_group_2025.jpg',
+      title: 'RED TEAM 2025 Champions Trophy Presentation',
+      url: '/images/red_team_trophy_trio_2025.jpg',
     },
     {
       id: 3,
@@ -347,104 +345,9 @@ export const History: React.FC = () => {
                   Captain: {item.championCaptain}
                 </p>
               </div>
-
-              {/* Runner Up Info */}
-              <div className="pt-4 border-t border-slate-800/80 w-full text-center space-y-1">
-                <span className="text-xs text-slate-400 block">Runner-up:</span>
-                <p className="text-sm font-semibold text-slate-300">
-                  {item.runnerUp}
-                </p>
-                <p className="text-xs font-mono text-slate-400">
-                  Captain: {item.runnerUpCaptain}
-                </p>
-              </div>
             </motion.div>
           ))}
         </div>
-      </div>
-
-      {/* 3. OFFICIAL CRICHEROES SECTION */}
-      <div className="pt-4 space-y-6 max-w-[900px] mx-auto w-full">
-        {/* Section Header */}
-        <div className="text-center space-y-3">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white font-display">
-            Official <span className="text-emerald-400">CricHeroes</span>
-          </h2>
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-            Follow every match with live scores, ball-by-ball commentary, player statistics, points table, and tournament updates on CricHeroes.
-          </p>
-        </div>
-
-        {/* CricHeroes Full Width Premium Glassmorphic Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          whileHover={{ y: -4 }}
-          transition={{ duration: 0.3 }}
-          className="glass-panel p-8 sm:p-12 rounded-[24px] border border-slate-800 hover:border-[#C5A059]/40 shadow-2xl hover:shadow-emerald-500/5 transition-all duration-300 relative overflow-hidden bg-gradient-to-br from-[#0c1018] via-[#080b12] to-[#0c1018]"
-        >
-          {/* Subtle Ambient Glow Elements */}
-          <div className="absolute -top-20 -right-20 w-72 h-72 bg-[#C5A059]/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="relative z-10 flex flex-col items-center text-center space-y-8">
-            {/* Large CricHeroes Branded Logo Header */}
-            <div className="flex flex-col items-center space-y-3">
-              <div className="p-3 sm:p-4 rounded-3xl bg-slate-950/90 border border-slate-800 shadow-2xl shadow-emerald-500/10 hover:border-emerald-500/40 transition-colors">
-                <img
-                  src="/images/cricheroes_logo.png"
-                  alt="CricHeroes Logo"
-                  className="h-16 w-16 sm:h-20 sm:w-20 object-contain drop-shadow-[0_0_12px_rgba(239,68,68,0.3)]"
-                  onError={(e) => {
-                    const target = e.currentTarget;
-                    if (target.src.includes('/images/')) {
-                      target.src = target.src.replace('/images/', '/');
-                    }
-                  }}
-                />
-              </div>
-              <span className="text-xs font-mono font-bold tracking-widest text-[#E2C889] uppercase">
-                OFFICIAL DIGITAL SCORING PARTNER
-              </span>
-            </div>
-
-            {/* Feature List Grid with Check Icons */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full pt-2">
-              {[
-                'Live Scores',
-                'Ball-by-ball Commentary',
-                'Player Statistics',
-                'Match Schedule',
-                'Points Table',
-                'Tournament Updates',
-              ].map((feature, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center space-x-3 p-3.5 rounded-xl bg-slate-900/90 border border-slate-800/80 text-left justify-start transition-colors hover:border-emerald-500/40 group"
-                >
-                  <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 group-hover:scale-110 transition-transform" />
-                  <span className="text-sm font-semibold text-slate-200 font-display">
-                    {feature}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Prominent CTA Button */}
-            <div className="w-full pt-4">
-              <a
-                href="https://chshare.link/tournament/miG8pP"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-600 text-white font-bold text-base shadow-xl shadow-emerald-600/25 hover:shadow-emerald-600/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer"
-              >
-                <span>View Tournament on CricHeroes</span>
-                <ExternalLink className="h-5 w-5 text-emerald-100" />
-              </a>
-            </div>
-          </div>
-        </motion.div>
       </div>
 
     </div>
