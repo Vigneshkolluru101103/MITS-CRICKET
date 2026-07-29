@@ -7,9 +7,9 @@ export const CricHeroesConfig = {
 };
 
 export const DILMANLeagueStats = {
-  activeSeason: 'Season 1 (2026)',
-  totalPlayersRegistered: 45,
-  auctionCap: '10k units (Virtual Points)',
+  activeSeason: 'Season 1',
+  totalPlayersRegistered: 50,
+  auctionCap: '50k',
   participatingTeams: 3,
   totalMatches: 4,
   nextMatchDate: '2026-08-15T09:00:00+05:30',
@@ -17,9 +17,9 @@ export const DILMANLeagueStats = {
 };
 
 export const TeamsList = [
-  { id: 't1', name: 'DILMAN Titans', shortName: 'DTN', color: 'from-amber-500 to-red-600', captain: 'BHARGAV' },
-  { id: 't2', name: 'Strikers XI', shortName: 'STK', color: 'from-cyan-500 to-blue-700', captain: 'SRINIVASULU' },
-  { id: 't3', name: 'Royal Strikers DILMAN', shortName: 'RSD', color: 'from-purple-600 to-pink-600', captain: 'SHIVARAJ' },
+  { id: 't1', name: 'DILMAN TITANS', shortName: 'DTN', color: 'from-amber-500 to-red-600', captain: 'BHARGAV' },
+  { id: 't2', name: 'DILMAN WARRIORS', shortName: 'DWR', color: 'from-cyan-500 to-blue-700', captain: 'SRINIVASULU' },
+  { id: 't3', name: 'DILMAN ROYALS', shortName: 'DRS', color: 'from-purple-600 to-pink-600', captain: 'SHIVARAJ' },
 ];
 
 export const SponsorsData: Sponsor[] = [
@@ -151,8 +151,8 @@ export const MatchFixturesData: MatchFixture[] = [
     id: 'm1',
     matchNumber: 1,
     stage: 'GROUP',
-    teamA: { name: 'DILMAN Titans', shortName: 'DTN', logo: '' },
-    teamB: { name: 'Strikers XI', shortName: 'STK', logo: '' },
+    teamA: { name: 'DILMAN TITANS', shortName: 'DTN', logo: '' },
+    teamB: { name: 'DILMAN WARRIORS', shortName: 'DWR', logo: '' },
     date: '2026-08-16',
     time: '09:00 AM IST',
     venue: 'MITS COLLEGE GROUND',
@@ -162,19 +162,19 @@ export const MatchFixturesData: MatchFixture[] = [
     id: 'm2',
     matchNumber: 2,
     stage: 'GROUP',
-    teamA: { name: 'Strikers XI', shortName: 'STK', logo: '' },
-    teamB: { name: 'Royal Strikers DILMAN', shortName: 'RSD', logo: '' },
+    teamA: { name: 'DILMAN WARRIORS', shortName: 'DWR', logo: '' },
+    teamB: { name: 'DILMAN ROYALS', shortName: 'DRS', logo: '' },
     date: '2026-08-16',
     time: '02:00 PM IST',
-    venue: 'MITS COLLEGE GROUND ',
+    venue: 'MITS COLLEGE GROUND',
     cricHeroesUrl: CricHeroesConfig.liveUrl
   },
   {
     id: 'm3',
     matchNumber: 3,
     stage: 'GROUP',
-    teamA: { name: 'Royal Strikers DILMAN', shortName: 'RSD', logo: '' },
-    teamB: { name: 'DILMAN Titans', shortName: 'DTN', logo: '' },
+    teamA: { name: 'DILMAN ROYALS', shortName: 'DRS', logo: '' },
+    teamB: { name: 'DILMAN TITANS', shortName: 'DTN', logo: '' },
     date: '2026-08-17',
     time: '09:00 AM IST',
     venue: 'MITS COLLEGE GROUND',
@@ -184,8 +184,8 @@ export const MatchFixturesData: MatchFixture[] = [
     id: 'm4',
     matchNumber: 4,
     stage: 'FINAL',
-    teamA: { name: 'Table Topper 1', shortName: 'TBD', logo: '' },
-    teamB: { name: 'Table Topper 2', shortName: 'TBD', logo: '' },
+    teamA: { name: 'TABLE TOPPER 1', shortName: 'TBD', logo: '' },
+    teamB: { name: 'TABLE TOPPER 2', shortName: 'TBD', logo: '' },
     date: '2026-08-24',
     time: '02:30 PM IST',
     venue: 'DILMAN Central Stadium Floodlight Turf',

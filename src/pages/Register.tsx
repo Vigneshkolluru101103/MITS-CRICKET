@@ -12,6 +12,7 @@ import { Modal } from '../components/ui/Modal';
 import { ToastContainer, type ToastMessage } from '../components/ui/Toast';
 import { uploadToCloudinary } from '../utils/cloudinary';
 import { addRegistrationToFirestore } from '../firebase/firestore';
+import paymentQrImage from '../assets/payment-qr.jpg';
 
 const registrationSchema = z.object({
   fullName: z.string().min(3, 'Full name must be at least 3 characters'),
@@ -25,7 +26,7 @@ const registrationSchema = z.object({
   battingStyle: z.string().min(1, 'Please select your batting style'),
   bowlingStyle: z.string().min(1, 'Please select your bowling style'),
   tshirtSize: z.string().min(1, 'Please select your jersey size'),
-  utrId: z.string().min(6, 'Valid UTR / Transaction ID required (min 6 characters)'),
+  utrId: z.string().min(1, 'Valid UTR / Transaction ID required'),
   agreeRules: z.boolean().refine(val => val === true, 'You must accept the Terms & Conditions'),
 });
 
@@ -190,9 +191,6 @@ export const Register: React.FC = () => {
 
       {/* Header */}
       <div className="text-center space-y-3">
-        <Badge variant="gold" icon={<Sparkles className="h-3.5 w-3.5" />}>
-          Season 1 Official Registration
-        </Badge>
         <h1 className="text-4xl sm:text-5xl font-black text-white font-display tracking-tight">
           PLAYER <span className="gradient-text-gold">REGISTRATION</span>
         </h1>
@@ -233,7 +231,7 @@ export const Register: React.FC = () => {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
             <div>
               <h3 className="text-xl font-bold text-white font-display">Step 1: Select Player Category</h3>
-              <p className="text-xs text-slate-400 mt-1">Choose whether you are currently studying at MITS or a graduated alumnus.</p>
+              <p className="text-xs text-slate-400 mt-1">Choose whether you are currently studying at MITS or a graduated alumini.</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -250,7 +248,7 @@ export const Register: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-lg font-bold text-white">Current MITS Student</h4>
-                  <p className="text-xs text-slate-400 mt-1">Enrolled in B.Tech, M.Tech, MCA, or MBA degree programs.</p>
+                  <p className="text-xs text-slate-400 mt-1">Enrolled in B.Tech, M.Tech, MCA and MBA degree programs.</p>
                 </div>
               </label>
 
@@ -262,12 +260,12 @@ export const Register: React.FC = () => {
                   }`}
               >
                 <div className="flex items-center justify-between">
-                  <Badge variant={selectedCategory === 'ALUMNI' ? 'gold' : 'slate'}>MITS Alumni (₹1000)</Badge>
+                  <Badge variant={selectedCategory === 'ALUMNI' ? 'gold' : 'slate'}>MITS Alumini (₹1000)</Badge>
                   <Trophy className="h-6 w-6 text-sky-400" />
                 </div>
                 <div>
-                  <h4 className="text-lg font-bold text-white">MITS Alumni / Passout</h4>
-                  <p className="text-xs text-slate-400 mt-1">Graduated from MITS. Connect back with collegiate cricket.</p>
+                  <h4 className="text-lg font-bold text-white">MITS Alumini / Passout</h4>
+                  <p className="text-xs text-slate-400 mt-1">Graduated from MITS. Connect back with college cricket.</p>
                 </div>
               </label>
             </div>
@@ -458,33 +456,38 @@ export const Register: React.FC = () => {
             <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-[#C5A059]/40 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 space-y-6 shadow-2xl">
               <div className="flex flex-col md:flex-row items-center gap-6 justify-between border-b border-slate-800 pb-6">
 
-                {/* QR Code Graphic Box */}
-                <div className="flex flex-col items-center justify-center p-4 rounded-2xl bg-white/5 border border-white/10 text-center space-y-3 shrink-0 w-full md:w-56">
-                  <div className="h-40 w-40 rounded-xl bg-white p-3 flex items-center justify-center shadow-lg relative group">
-                    {/* Visual QR SVG representation */}
-                    <div className="grid grid-cols-5 gap-1.5 w-full h-full p-1 bg-slate-950 rounded-md">
-                      <div className="bg-[#C5A059] rounded-xs col-span-2 row-span-2"></div>
-                      <div className="bg-[#E2C889] rounded-xs"></div>
-                      <div className="bg-[#C5A059] rounded-xs col-span-2 row-span-2"></div>
-                      <div className="bg-slate-700 rounded-xs"></div>
-                      <div className="bg-[#E2C889] rounded-xs col-span-3"></div>
-                      <div className="bg-white rounded-xs"></div>
-                      <div className="bg-[#C5A059] rounded-xs col-span-2"></div>
-                      <div className="bg-[#E2C889] rounded-xs col-span-2"></div>
-                      <div className="bg-[#C5A059] rounded-xs"></div>
-                    </div>
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/70 backdrop-blur-xs rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                      <QrCode className="h-10 w-10 text-[#E2C889]" />
+                {/* Official HD Payment QR Code Box */}
+                <div className="flex flex-col items-center justify-center p-4 sm:p-5 rounded-2xl bg-white/5 border border-white/10 text-center space-y-3 shrink-0 w-full md:w-64">
+                  <div
+                    className="relative group p-2.5 bg-white rounded-2xl shadow-2xl overflow-hidden cursor-pointer border border-[#E2C889]/30"
+                    onClick={() => window.open(paymentQrImage, '_blank')}
+                    title="Click to view HD QR Code in full resolution"
+                  >
+                    <img
+                      src={paymentQrImage}
+                      alt="Official PhonePe Payment QR Code"
+                      className="h-48 w-48 object-contain rounded-xl transition-transform duration-300 group-hover:scale-105"
+                      loading="eager"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-[2px] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="text-xs font-bold text-white flex items-center gap-1.5 bg-slate-950/90 px-3.5 py-2 rounded-full border border-[#E2C889]/40 shadow-lg">
+                        <QrCode className="h-4 w-4 text-[#E2C889]" /> View Full HD
+                      </span>
                     </div>
                   </div>
-                  <span className="text-[10px] font-mono text-slate-300 font-bold uppercase tracking-widest">SCAN TO PAY {feeAmount}</span>
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="text-[11px] font-mono text-[#E2C889] font-extrabold uppercase tracking-wider bg-[#E2C889]/15 px-3 py-1 rounded-full border border-[#E2C889]/30">
+                      SCAN TO PAY {feeAmount}
+                    </span>
+                    <span className="text-[10px] text-slate-400">Click QR to enlarge image</span>
+                  </div>
                 </div>
 
                 {/* UPI Receiver Details */}
                 <div className="space-y-4 flex-1 text-center md:text-left">
                   <div>
                     <span className="text-xs font-mono text-slate-400 uppercase">Payee Name</span>
-                    <h4 className="text-2xl font-black text-white font-display">T SUMAN</h4>
+                    <h4 className="text-2xl font-black text-white font-display">A SUMAN</h4>
                   </div>
 
                   <div className="space-y-1">
@@ -576,7 +579,7 @@ export const Register: React.FC = () => {
                 <li>Players must provide accurate personal and cricket-related information during registration.</li>
                 <li>Any misconduct, use of abusive language, or violation of tournament rules may result in <strong>immediate disqualification</strong>.</li>
                 <li>Participants are advised to undergo a basic fitness check before playing.</li>
-                <li>The decision of the <strong>Tournament Organizing Committee</strong> shall be <strong>final and binding</strong> in all matters.</li>
+                <li>Players participate at their own risk. Organizers are not liable for any injuries or accidents.</li>
               </ul>
             </div>
 

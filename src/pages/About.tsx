@@ -1,16 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Trophy, 
-  Target, 
-  Sparkles, 
-  ShieldCheck, 
-  Shirt, 
-  CircleDot, 
-  Award, 
-  Users, 
-  Compass, 
-  Flame 
+import {
+  Trophy,
+  Target,
+  Sparkles,
+  ShieldCheck,
+  Shirt,
+  CircleDot,
+  Award,
+  Users,
+  Compass,
+  Flame
 } from 'lucide-react';
 import { Badge } from '../components/ui/Badge';
 
@@ -77,8 +77,10 @@ export const About: React.FC = () => {
         <Badge variant="gold" icon={<Sparkles className="h-3.5 w-3.5" />}>
           OFFICIAL MITS CRICKET LEAGUE
         </Badge>
-        <h1 className="text-4xl sm:text-6xl font-black text-white font-display tracking-tight leading-none">
-          ABOUT <span className="gradient-text-gold">DILMAN PREMIER LEAGUE</span>
+        <h1 className="font-black font-display text-center">
+          <span className="text-slate-400 text-sm sm:text-base font-bold tracking-widest uppercase block mb-1">ABOUT</span>
+          <span className="dilman-brand-text block text-5xl sm:text-7xl tracking-wider leading-none">DILMAN</span>
+          <span className="text-white block text-2xl sm:text-4xl font-extrabold tracking-[0.2em] uppercase mt-2">PREMIER LEAGUE</span>
         </h1>
         <p className="text-emerald-400 text-lg sm:text-xl font-bold tracking-wide font-display">
           (DPL)
@@ -101,13 +103,13 @@ export const About: React.FC = () => {
           <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-display">
             The Pinnacle of <span className="text-[#E2C889]">MITS Cricket</span>
           </h2>
-          
+
           <div className="space-y-4 text-slate-300 text-base sm:text-lg leading-relaxed">
             <p>
               <strong className="text-white">DILMAN Premier League (DPL)</strong> is an exclusive auction-based cricket tournament conducted only for MITS Cricket players. The league is designed to provide a professional and competitive platform where MITS cricketers can showcase their talent, compete at a high level, and enjoy a well-organized tournament experience.
             </p>
             <p>
-              DPL follows <strong className="text-emerald-400">ICC rules</strong>, uses <strong className="text-[#E2C889]">white leather ball matches</strong>, and features an <strong className="text-cyan-400">official player auction</strong> with <strong className="text-rose-400">free jerseys</strong> for all registered players. The tournament is committed to maintaining fairness, discipline, and sportsmanship throughout the competition.
+              DPL follows <strong className="text-emerald-400">ICC rules</strong>, uses <strong className="text-[#E2C889]">white leather ball matches</strong>, and features an <strong className="text-cyan-400">official player auction</strong> with <strong className="text-rose-400">free jerseys and attractive Prizes,Trophies and Cricket Equipment.</strong> The tournament is committed to maintaining fairness, discipline, and sportsmanship throughout the competition.
             </p>
           </div>
         </div>
@@ -149,7 +151,7 @@ export const About: React.FC = () => {
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#C5A059]/10 text-[#E2C889] border border-[#C5A059]/30">
               <Compass className="h-7 w-7" />
             </div>
-            
+
             <div>
               <span className="text-xs font-mono text-[#E2C889] tracking-wider uppercase">Strategic Outlook</span>
               <h3 className="text-3xl font-black text-white font-display mt-1">Our Vision</h3>

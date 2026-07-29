@@ -19,20 +19,21 @@ export const SponsorCard: React.FC<SponsorCardProps> = memo(({ sponsor }) => {
       transition={{ duration: 0.25 }}
       className="group glass-panel rounded-[24px] border border-slate-800/80 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:border-[#D4AF37]/40 shadow-xl hover:shadow-2xl gpu-layer"
     >
-      {/* Photo Container */}
-      <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-950">
+      {/* Photo Container - Full Head & Hair Visibility */}
+      <div className="relative h-80 sm:h-96 w-full overflow-hidden bg-slate-950">
         <img
-          src={getOptimizedImageUrl(sponsor.photo, 600)}
+          src={getOptimizedImageUrl(sponsor.photo, 800)}
           alt={sponsor.name}
           loading="lazy"
           decoding="async"
-          width={600}
-          height={400}
-          className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+          width={800}
+          height={600}
+          className="h-full w-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0d14] via-[#0a0d14]/30 to-transparent pointer-events-none" />
+        {/* Soft Bottom Transition Gradient */}
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0a0d14] via-[#0a0d14]/70 to-transparent pointer-events-none" />
 
-        <div className="absolute top-4 left-4">
+        <div className="absolute top-4 left-4 z-10">
           <Badge variant="gold" icon={<Sparkles className="h-3 w-3" />}>
             OFFICIAL SPONSOR
           </Badge>

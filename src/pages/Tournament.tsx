@@ -141,7 +141,7 @@ export const Tournament: React.FC = () => {
               <div className="flex items-start gap-3">
                 <CheckCircle className="h-5 w-5 text-[#E2C889] shrink-0 mt-0.5" />
                 <div>
-                  <strong className="text-white">⏱️ Match Format:</strong> League & Final: 20 Overs per Innings. Official SG white leather cricket balls will be used throughout the tournament.
+                  <strong className="text-white">⏱️ Match Format:</strong> League & Final: 20 Overs per Innings. White leather cricket balls will be used throughout the tournament.
                 </div>
               </div>
 

@@ -27,7 +27,7 @@ export const CommitteeCard: React.FC<CommitteeCardProps> = memo(({ member }) => 
             decoding="async"
             width={200}
             height={200}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
           />
         </div>
       </div>

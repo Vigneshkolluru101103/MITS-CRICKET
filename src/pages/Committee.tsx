@@ -11,7 +11,7 @@ export const Committee: React.FC = () => {
           Team <span className="text-emerald-400">Captains</span>
         </h1>
         <p className="text-slate-400 text-base sm:text-lg leading-relaxed">
-          Meet the 3 team captains leading the DILMAN Premier League franchise teams.
+          Meet the 3 teams of captains leading the DILMAN Premier League franchise teams.
         </p>
       </div>
 

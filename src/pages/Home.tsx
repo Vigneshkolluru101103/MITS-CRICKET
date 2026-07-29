@@ -26,18 +26,22 @@ export const Home: React.FC = () => {
             className="inline-flex items-center gap-2 mb-6"
           >
             <Badge variant="gold" icon={<Sparkles className="h-3.5 w-3.5" />}>
-              DILMAN Premier League 2026
+              DILMAN Premier League
             </Badge>
           </motion.div>
 
-          {/* Main Title Header */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight font-display max-w-5xl mx-auto leading-[1.05]"
+            className="font-black font-display max-w-5xl mx-auto leading-none text-center"
           >
-            <span className="gradient-text-gold">WELCOME TO THE DPL 2026</span>
+            <span className="dilman-brand-text block text-5xl sm:text-7xl md:text-8xl lg:text-9xl tracking-wider">
+              DILMAN
+            </span>
+            <span className="text-white block text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-[0.2em] sm:tracking-[0.25em] uppercase mt-2 sm:mt-3">
+              PREMIER LEAGUE
+            </span>
           </motion.h1>
 
           <motion.p
@@ -46,7 +50,7 @@ export const Home: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mt-6 text-base sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed"
           >
-            Experience the biggest collegiate cricket spectacle at Madanapalle Institute of Technology & Science. Home to 3 dynamic franchises, 40+ outstanding players, an adrenaline-filled player auction, and every match streamed live in HD on CricHeroes.
+            Experience the biggest collegiate cricket spectacle at Madanapalle Institute of Technology & Science. Home to 3 dynamic franchises, 50+ outstanding players, an adrenaline-filled player auction, and every match streamed live in HD on CricHeroes.
           </motion.p>
 
           {/* Hero Action Buttons */}

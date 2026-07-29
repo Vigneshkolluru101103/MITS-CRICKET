@@ -3,8 +3,13 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
+const rawApiKey = import.meta.env.VITE_FIREBASE_API_KEY || '';
+export const isFirebaseConfigured = Boolean(
+  rawApiKey && rawApiKey.trim().length > 10 && !rawApiKey.includes('DummyKey')
+);
+
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDummyKeyForDevelopment12345",
+  apiKey: isFirebaseConfigured ? rawApiKey : "AIzaSyDummyKeyForDevelopment12345",
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "mits-dpl.firebaseapp.com",
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "mits-dpl",
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "mits-dpl.appspot.com",

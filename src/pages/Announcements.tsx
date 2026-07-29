@@ -26,7 +26,7 @@ export const Announcements: React.FC = () => {
           LEAGUE <span className="gradient-text-gold">ANNOUNCEMENTS</span>
         </h1>
         <p className="text-slate-300 text-base sm:text-lg">
-          Stay updated with official bulletins regarding auction dates, rule changes, live stream schedules, and trials.
+          Stay updated with the latest announcements on auctions, trials, match schedules, live streams, and tournament updates.
         </p>
       </div>
 
@@ -38,8 +38,8 @@ export const Announcements: React.FC = () => {
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap ${selectedCategory === cat
-                  ? 'bg-gradient-to-r from-[#D5B266] to-[#C59B4E] text-slate-950 shadow-md'
-                  : 'text-slate-400 hover:text-white'
+                ? 'bg-gradient-to-r from-[#D5B266] to-[#C59B4E] text-slate-950 shadow-md'
+                : 'text-slate-400 hover:text-white'
                 }`}
             >
               {cat}

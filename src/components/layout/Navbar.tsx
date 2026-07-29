@@ -40,11 +40,10 @@ export const Navbar: React.FC = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
           ? 'bg-[#0a0d14]/90 backdrop-blur-xl border-b border-slate-800/70 py-3 shadow-2xl shadow-black/50'
           : 'bg-transparent py-5'
-      }`}
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
@@ -53,14 +52,12 @@ export const Navbar: React.FC = () => {
             <div className="relative flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-[#D4AF37] text-slate-950 font-black text-xl shadow-md shadow-[#D4AF37]/20 group-hover:scale-105 transition-transform">
               <Trophy className="h-5 w-5 stroke-[2.5]" />
             </div>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="text-base sm:text-lg font-black tracking-tight text-white font-display">
-                  DILMAN <span className="gradient-text-gold">PREMIER LEAGUE</span>
-                </span>
-              </div>
-              <span className="text-[10px] font-mono tracking-widest text-slate-400 uppercase">
-                Official Tournament Portal
+            <div className="flex flex-col justify-center">
+              <span className="dilman-brand-text block text-base sm:text-lg font-black tracking-wider leading-none">
+                DILMAN
+              </span>
+              <span className="text-white block text-[10px] sm:text-[11px] font-extrabold tracking-[0.2em] uppercase mt-0.5 opacity-90">
+                PREMIER LEAGUE
               </span>
             </div>
           </Link>
@@ -73,11 +70,10 @@ export const Navbar: React.FC = () => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`relative px-3 py-1 text-xs xl:text-sm font-medium transition-all rounded-full border ${
-                    isActive
+                  className={`relative px-3 py-1 text-xs xl:text-sm font-medium transition-all rounded-full border ${isActive
                       ? 'bg-[#D4AF37] text-slate-950 font-bold border-[#D4AF37] shadow-sm'
                       : 'border-transparent text-slate-300 hover:text-white hover:border-[#D4AF37]/50'
-                  }`}
+                    }`}
                 >
                   <span className="relative z-10">{link.name}</span>
                 </Link>
@@ -147,11 +143,10 @@ export const Navbar: React.FC = () => {
                     key={link.path}
                     to={link.path}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center justify-between px-4 py-3 rounded-xl border text-sm font-medium transition-all ${
-                      isActive
+                    className={`flex items-center justify-between px-4 py-3 rounded-xl border text-sm font-medium transition-all ${isActive
                         ? 'bg-[#D4AF37]/20 border-[#D4AF37] text-[#D4AF37] font-bold'
                         : 'border-slate-800/80 text-slate-300 hover:bg-slate-900'
-                    }`}
+                      }`}
                   >
                     <span>{link.name}</span>
                     <ChevronRight className="h-4 w-4 text-slate-500" />
