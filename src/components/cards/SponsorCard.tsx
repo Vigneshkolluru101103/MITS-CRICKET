@@ -1,31 +1,36 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 import type { SponsorItem } from '../../data/sponsors';
 import { Badge } from '../ui/Badge';
+import { getOptimizedImageUrl } from '../../utils/cloudinary';
 
 interface SponsorCardProps {
   sponsor: SponsorItem;
 }
 
-export const SponsorCard: React.FC<SponsorCardProps> = ({ sponsor }) => {
+export const SponsorCard: React.FC<SponsorCardProps> = memo(({ sponsor }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.3 }}
-      className="group glass-panel rounded-2xl border border-slate-800/80 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:border-[#C5A059]/40 shadow-xl hover:shadow-2xl"
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.25 }}
+      className="group glass-panel rounded-[24px] border border-slate-800/80 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:border-[#D4AF37]/40 shadow-xl hover:shadow-2xl gpu-layer"
     >
-      {/* Full Bleed Image Container */}
+      {/* Photo Container */}
       <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-950">
         <img
-          src={sponsor.photo}
+          src={getOptimizedImageUrl(sponsor.photo, 600)}
           alt={sponsor.name}
+          loading="lazy"
+          decoding="async"
+          width={600}
+          height={400}
           className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0d14] via-[#0a0d14]/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0d14] via-[#0a0d14]/30 to-transparent pointer-events-none" />
 
         <div className="absolute top-4 left-4">
           <Badge variant="gold" icon={<Sparkles className="h-3 w-3" />}>
@@ -54,4 +59,6 @@ export const SponsorCard: React.FC<SponsorCardProps> = ({ sponsor }) => {
       </div>
     </motion.div>
   );
-};
+});
+
+SponsorCard.displayName = 'SponsorCard';

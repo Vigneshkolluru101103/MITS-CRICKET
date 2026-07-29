@@ -50,3 +50,14 @@ export const uploadToCloudinary = async (file: File): Promise<string> => {
     throw err;
   }
 };
+
+/**
+ * Optimizes Cloudinary image URLs with f_auto, q_auto, w_auto, dpr_auto parameters
+ */
+export const getOptimizedImageUrl = (url: string, width = 600): string => {
+  if (!url) return '';
+  if (url.includes('res.cloudinary.com') && url.includes('/upload/')) {
+    return url.replace('/upload/', `/upload/f_auto,q_auto,w_${width},dpr_auto/`);
+  }
+  return url;
+};
