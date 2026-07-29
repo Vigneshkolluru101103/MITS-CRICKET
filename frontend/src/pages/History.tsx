@@ -205,6 +205,12 @@ export const History: React.FC = () => {
                   src={galleryImages[currentSlideIndex].url}
                   alt=""
                   className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-35 scale-110 pointer-events-none"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (target.src.includes('/images/')) {
+                      target.src = target.src.replace('/images/', '/');
+                    }
+                  }}
                 />
 
                 {/* HD Sharp Main Image */}
@@ -212,6 +218,12 @@ export const History: React.FC = () => {
                   src={galleryImages[currentSlideIndex].url}
                   alt={galleryImages[currentSlideIndex].title}
                   className="relative z-10 max-w-full max-h-full object-contain p-2 rounded-2xl drop-shadow-2xl"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (target.src.includes('/images/')) {
+                      target.src = target.src.replace('/images/', '/');
+                    }
+                  }}
                 />
               </motion.div>
             </AnimatePresence>
