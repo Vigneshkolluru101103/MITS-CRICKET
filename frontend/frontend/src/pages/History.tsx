@@ -5,32 +5,161 @@ import { ChevronLeft, ChevronRight, Trophy } from 'lucide-react';
 export const History: React.FC = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
 
-  // Gallery slider images (RED TEAM winners, squad, captain portrait, and BLUE TEAM runners-up)
+  // Gallery slider images (RED TEAM champions, captains, huddle, match action, and team squads)
   const galleryImages = [
     {
       id: 1,
+      title: 'RED TEAM 2025 Champions Trophy Presentation',
+      url: '/red_team_trophy_trio_2025.jpg',
+    },
+    {
+      id: 2,
+      title: 'MITS Tournament Stars & Captains 2025',
+      url: '/mits_stars_group_2025.jpg',
+    },
+    {
+      id: 3,
+      title: 'RED TEAM Captain Vignesh with Trophies 2025',
+      url: '/red_team_captain_trophy_2025.jpg',
+    },
+    {
+      id: 4,
       title: 'RED TEAM 2025 Champions Celebration',
       url: '/red_team_winners_2025.jpg',
     },
     {
-      id: 2,
+      id: 5,
+      title: 'RED TEAM Tactical Huddle 2025',
+      url: '/red_team_huddle_2025.jpg',
+    },
+    {
+      id: 6,
+      title: 'RED TEAM On-Field Match Discussion 2025',
+      url: '/red_team_match_discussion_2025.jpg',
+    },
+    {
+      id: 7,
+      title: 'MITS Tournament Captains & Leaders Lineup 2025',
+      url: '/mits_captains_lineup_2025.jpg',
+    },
+    {
+      id: 8,
+      title: 'MITS Captains Trio 2025',
+      url: '/mits_trio_captains_2025.jpg',
+    },
+    {
+      id: 9,
       title: 'RED TEAM 2025 Squad Pose',
       url: '/red_team_squad_2025.jpg',
     },
-
     {
-      id: 4,
-      title: 'BLUE TEAM 2025 Runners-Up Squad',
-      url: '/blue_team_runners_2025.jpg',
+      id: 10,
+      title: 'YELLOW TEAM 2025 Squad Pose',
+      url: '/yellow_team_squad_2025.jpg',
+    },
+    {
+      id: 11,
+      title: 'YELLOW TEAM Players Duo 2025',
+      url: '/yellow_team_duo_2025.jpg',
+    },
+    {
+      id: 12,
+      title: 'RED TEAM Vignesh Power Lofted Shot 2025',
+      url: '/vignesh_power_shot_2025.jpg',
+    },
+    {
+      id: 13,
+      title: 'RED TEAM Vignesh Cover Drive 2025',
+      url: '/vignesh_frontfoot_drive_2025.jpg',
+    },
+    {
+      id: 14,
+      title: 'BLUE TEAM Openers Ricky & Sunny Walk To Pitch 2025',
+      url: '/blue_team_batsmen_walking_2025.jpg',
+    },
+    {
+      id: 15,
+      title: 'MITS Captains & Special Guest Fan 2025',
+      url: '/mits_captains_family_2025.jpg',
+    },
+    {
+      id: 16,
+      title: 'YELLOW TEAM Leaders Trio 2025',
+      url: '/yellow_team_trio_2025.jpg',
+    },
+    {
+      id: 17,
+      title: 'YELLOW TEAM Ricky #48 Live Batting Action 2025',
+      url: '/ricky_batting_action_2025.jpg',
+    },
+    {
+      id: 18,
+      title: 'YELLOW TEAM Openers Guru #83 & Yeshu #13 Walk To Pitch 2025',
+      url: '/yellow_batsmen_walking_2025.jpg',
+    },
+    {
+      id: 19,
+      title: 'BLUE TEAM Mid-Pitch Tactical Strategy Chat 2025',
+      url: '/blue_team_midpitch_chat_2025.jpg',
+    },
+    {
+      id: 20,
+      title: 'MITS Captain On-Field Strategy & Directing Play 2025',
+      url: '/captain_field_setting_2025.jpg',
+    },
+    {
+      id: 21,
+      title: 'Batsman Milestone Celebration & Bat Raising 2025',
+      url: '/batsman_raising_bat_celebration_2025.jpg',
+    },
+    {
+      id: 22,
+      title: 'Post-Match Sportsmanship Handshake & Guard of Honor 2025',
+      url: '/post_match_handshake_guard_of_honor_2025.png',
+    },
+    {
+      id: 23,
+      title: 'MITS Captains & Leaders Perspective Lineup 2025',
+      url: '/mits_captains_depth_lineup_2025.jpg',
+    },
+    {
+      id: 24,
+      title: 'RED TEAM Champions Leaders Trophy Pose 2025',
+      url: '/red_team_duo_trophy_2025.jpg',
+    },
+    {
+      id: 25,
+      title: 'RED TEAM Key Performers with Bat & Ball 2025',
+      url: '/red_team_performers_quad_2025.jpg',
+    },
+    {
+      id: 26,
+      title: 'MITS Captains & Organizers at "I ❤ MITS" Monument 2025',
+      url: '/mits_captains_ilove_mits_2025.jpg',
+    },
+    {
+      id: 27,
+      title: 'Captains Trio with Champions Trophy at Campus Landmark 2025',
+      url: '/mits_trio_captains_monument_2025.jpg',
+    },
+    {
+      id: 28,
+      title: 'Independence Day Cup 2025 Champions Trophy Close-Up',
+      url: '/champions_trophy_close_up_2025.jpg',
+    },
+    {
+      id: 29,
+      title: 'BLUE TEAM Medal & Individual Awards Presentation Ceremony 2025',
+      url: '/blue_team_medals_ceremony_2025.jpg',
     },
   ];
 
   const pastChampionsList = [
     {
       year: '2025',
-      champion: 'RED TEAM',
+      champion: 'MITS RED TEAM',
       championCaptain: 'VIGNESH K',
-      runnerUp: 'BLUE TEAM',
+      runnerUp: 'MITS BLUE TEAM',
       runnerUpCaptain: 'MOURYA R',
     },
   ];
@@ -55,24 +184,36 @@ export const History: React.FC = () => {
             <span>Tournament History</span>
           </h1>
           <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto font-normal">
-            Relive the most memorable moments from previous tournaments
+            Relive the most memorable moments from previous tournament
           </p>
         </div>
 
         {/* Full Width Image Display */}
         <div className="relative rounded-3xl overflow-hidden border border-slate-800 bg-slate-950 shadow-2xl group">
-          <div className="relative h-[320px] sm:h-[480px] w-full overflow-hidden">
+          <div className="relative h-[360px] sm:h-[520px] w-full overflow-hidden bg-slate-950 flex items-center justify-center">
             <AnimatePresence mode="wait">
-              <motion.img
+              <motion.div
                 key={currentSlideIndex}
-                src={galleryImages[currentSlideIndex].url}
-                alt={galleryImages[currentSlideIndex].title}
-                initial={{ opacity: 0, scale: 1.02 }}
+                initial={{ opacity: 0, scale: 1.01 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
+                exit={{ opacity: 0, scale: 0.99 }}
                 transition={{ duration: 0.4 }}
-                className="w-full h-full object-cover"
-              />
+                className="relative w-full h-full flex items-center justify-center"
+              >
+                {/* Ambient Blurred Backdrop to fill aspect ratio cleanly without distorting */}
+                <img
+                  src={galleryImages[currentSlideIndex].url}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-35 scale-110 pointer-events-none"
+                />
+
+                {/* HD Sharp Main Image */}
+                <img
+                  src={galleryImages[currentSlideIndex].url}
+                  alt={galleryImages[currentSlideIndex].title}
+                  className="relative z-10 max-w-full max-h-full object-contain p-2 rounded-2xl drop-shadow-2xl"
+                />
+              </motion.div>
             </AnimatePresence>
 
             {galleryImages.length > 1 && (
@@ -151,7 +292,7 @@ export const History: React.FC = () => {
                   {item.champion}
                 </h4>
                 <p className="text-xs font-mono text-[#E2C889] font-semibold">
-                  Capt: {item.championCaptain}
+                  Captain: {item.championCaptain}
                 </p>
               </div>
 
@@ -162,7 +303,7 @@ export const History: React.FC = () => {
                   {item.runnerUp}
                 </p>
                 <p className="text-xs font-mono text-slate-400">
-                  Capt: {item.runnerUpCaptain}
+                  Captain: {item.runnerUpCaptain}
                 </p>
               </div>
             </motion.div>
