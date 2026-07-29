@@ -14,25 +14,27 @@ export const SponsorCard: React.FC<SponsorCardProps> = ({ sponsor }) => {
       viewport={{ once: true }}
       whileHover={{ y: -6 }}
       transition={{ duration: 0.4 }}
-      className="bg-slate-900/80 backdrop-blur-md rounded-[20px] p-6 sm:p-8 border border-slate-800/80 shadow-xl hover:border-emerald-500/40 hover:shadow-2xl hover:shadow-emerald-500/5 transition-all duration-300 flex flex-col items-center text-center group"
+      className="bg-slate-900/80 backdrop-blur-md rounded-[20px] p-8 sm:p-10 border border-slate-800/80 shadow-xl hover:border-emerald-500/40 hover:shadow-2xl hover:shadow-emerald-500/5 transition-all duration-300 flex flex-col items-center text-center group"
     >
-      {/* Sponsor Photo */}
-      <div className="w-[140px] h-[140px] rounded-[12px] overflow-hidden mb-6 border border-slate-700/60 shadow-md group-hover:border-emerald-400/50 transition-colors">
-        <img
-          src={sponsor.photo}
-          alt={sponsor.name}
-          className="w-[140px] h-[140px] object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+      {/* Sponsor Photo Frame with Extra Breathing Space */}
+      <div className="p-2.5 bg-slate-950/80 rounded-[18px] border border-slate-800/90 shadow-inner mb-7 group-hover:border-emerald-500/30 transition-colors">
+        <div className="w-[140px] h-[140px] rounded-[12px] overflow-hidden shadow-md">
+          <img
+            src={sponsor.photo}
+            alt={sponsor.name}
+            className="w-[140px] h-[140px] object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
       </div>
 
       {/* Sponsor Name */}
-      <h3 className="text-[24px] font-bold text-white tracking-tight font-display mb-1 group-hover:text-emerald-400 transition-colors">
+      <h3 className="text-[24px] font-bold text-white tracking-tight font-display mb-1.5 group-hover:text-emerald-400 transition-colors">
         {sponsor.name}
       </h3>
 
       {/* Designation / Company */}
       {sponsor.designation && (
-        <p className="text-[16px] text-emerald-400 font-medium mb-3">
+        <p className="text-[16px] text-emerald-400 font-medium mb-4">
           {sponsor.designation}
         </p>
       )}
