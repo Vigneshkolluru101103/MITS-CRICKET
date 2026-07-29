@@ -16,8 +16,8 @@ export const Sponsors: React.FC = () => {
       </div>
 
       {/* Responsive Sponsors Grid */}
-      <div className="max-w-4xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {sponsorsData.map((sponsor) => (
             <SponsorCard key={sponsor.id} sponsor={sponsor} />
           ))}
