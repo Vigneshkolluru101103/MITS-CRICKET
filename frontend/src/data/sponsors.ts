@@ -12,7 +12,7 @@ export const sponsorsData: SponsorItem[] = [
     name: 'SUMAN THOTI',
     designation: 'Title Sponsor & Patron',
     photo: '/images/suman_thoti.jpg',
-    description: 'Supporting the MITS Premier League through valuable sponsorship, mentorship, and continuous encouragement for student athletes.',
+    description: 'Supporting the DPL Premier League through valuable sponsorship, mentorship, and continuous encouragement for student athletes.',
   },
   {
     id: '2',
@@ -25,7 +25,7 @@ export const sponsorsData: SponsorItem[] = [
     id: '3',
     name: 'Dr.DINESH',
     designation: 'HEAD',
-    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
+    photo: '/images/dr_dinesh.jpg',
     description: 'Providing crucial tournament support, equipment sponsorship, and branding to drive sports excellence at MITS.',
   },
 ];
