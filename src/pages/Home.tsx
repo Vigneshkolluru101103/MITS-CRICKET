@@ -30,19 +30,31 @@ export const Home: React.FC = () => {
             </Badge>
           </motion.div>
 
-          <motion.h1
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-black font-display max-w-5xl mx-auto leading-none text-center"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 max-w-5xl mx-auto"
           >
-            <span className="dilman-brand-text block text-5xl sm:text-7xl md:text-8xl lg:text-9xl tracking-wider">
-              DILMAN
-            </span>
-            <span className="text-white block text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-[0.2em] sm:tracking-[0.25em] uppercase mt-2 sm:mt-3">
-              PREMIER LEAGUE
-            </span>
-          </motion.h1>
+            <motion.img
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              src="/dpl_logo.jpg"
+              alt="DILMAN Premier League Logo"
+              className="h-24 w-24 sm:h-32 sm:w-32 md:h-40 md:w-40 lg:h-44 lg:w-44 rounded-full object-cover border-2 border-[#D4AF37]/60 shadow-[0_0_35px_rgba(212,175,55,0.4)] hover:scale-105 transition-transform duration-300 shrink-0"
+            />
+            <div className="text-center sm:text-left">
+              <h1 className="font-black font-display leading-none">
+                <span className="dilman-brand-text block text-5xl sm:text-7xl md:text-8xl lg:text-9xl tracking-wider">
+                  DILMAN
+                </span>
+                <span className="text-white block text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-[0.2em] sm:tracking-[0.25em] uppercase mt-2 sm:mt-3">
+                  PREMIER LEAGUE
+                </span>
+              </h1>
+            </div>
+          </motion.div>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}

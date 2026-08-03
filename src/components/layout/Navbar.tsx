@@ -49,9 +49,11 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center justify-between">
           {/* Brand Logo */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="relative flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-[#D4AF37] text-slate-950 font-black text-xl shadow-md shadow-[#D4AF37]/20 group-hover:scale-105 transition-transform">
-              <Trophy className="h-5 w-5 stroke-[2.5]" />
-            </div>
+            <img
+              src="/dpl_logo.jpg"
+              alt="DILMAN Premier League Logo"
+              className="h-10 w-10 sm:h-11 sm:w-11 rounded-full object-cover border border-[#D4AF37]/60 shadow-md shadow-[#D4AF37]/20 group-hover:scale-105 transition-transform"
+            />
             <div className="flex flex-col justify-center">
               <span className="dilman-brand-text block text-base sm:text-lg font-black tracking-wider leading-none">
                 DILMAN

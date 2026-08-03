@@ -10,22 +10,22 @@ export const committeeData: CommitteeMemberItem[] = [
   {
     id: '1',
     name: 'BHARGAV',
-    role: 'Captain - DILMAN TITANS',
+    role: 'Captain - DILMAN WARRIORS',
     photo: '/images/bharav.jpg',
     description: 'Franchise Captain leading DILMAN Titans in the DPL Premier League.',
   },
   {
     id: '2',
     name: 'SRINIVASULU',
-    role: 'Captain - DILMAN WARRIORS',
+    role: 'Captain - DILMAN GLADIATORS',
     photo: '/images/srinivasulu.jpg',
     description: 'Franchise Captain leading DILMAN WARRIORS in the DPL Premier League.',
   },
   {
     id: '3',
     name: 'SHIVARAJ',
-    role: 'Captain - DILMAN ROYALS',
+    role: 'Captain - DILMAN TITANS',
     photo: '/images/shivaraj.jpg',
-    description: 'Franchise Captain leading DILMAN ROYALS in the DPL Premier League.',
+    description: 'Franchise Captain leading DILMAN GLADIATORS in the DPL Premier League.',
   },
 ];

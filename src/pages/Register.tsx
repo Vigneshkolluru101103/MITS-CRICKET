@@ -575,7 +575,6 @@ export const Register: React.FC = () => {
 
               <ul className="space-y-2 text-xs text-slate-300 list-disc list-inside leading-relaxed">
                 <li>Registration is <strong>mandatory</strong> only after successful payment.</li>
-                <li>The <strong>{feeAmount} registration fee is non-refundable</strong> under any circumstances.</li>
                 <li>Players must provide accurate personal and cricket-related information during registration.</li>
                 <li>Any misconduct, use of abusive language, or violation of tournament rules may result in <strong>immediate disqualification</strong>.</li>
                 <li>Participants are advised to undergo a basic fitness check before playing.</li>

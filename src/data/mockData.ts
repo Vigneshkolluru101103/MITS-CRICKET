@@ -17,9 +17,9 @@ export const DILMANLeagueStats = {
 };
 
 export const TeamsList = [
-  { id: 't1', name: 'DILMAN TITANS', shortName: 'DTN', color: 'from-amber-500 to-red-600', captain: 'BHARGAV' },
-  { id: 't2', name: 'DILMAN WARRIORS', shortName: 'DWR', color: 'from-cyan-500 to-blue-700', captain: 'SRINIVASULU' },
-  { id: 't3', name: 'DILMAN ROYALS', shortName: 'DRS', color: 'from-purple-600 to-pink-600', captain: 'SHIVARAJ' },
+  { id: 't1', name: 'DILMAN TITANS', shortName: 'DTN', color: 'from-amber-500 to-red-600', captain: 'SHIVARAJ' },
+  { id: 't2', name: 'DILMAN WARRIORS', shortName: 'DWR', color: 'from-cyan-500 to-blue-700', captain: 'BHARGAV' },
+  { id: 't3', name: 'DILMAN GLADIATORS', shortName: 'DGL', color: 'from-purple-600 to-pink-600', captain: 'SRINIVASULU' },
 ];
 
 export const SponsorsData: Sponsor[] = [
@@ -163,7 +163,7 @@ export const MatchFixturesData: MatchFixture[] = [
     matchNumber: 2,
     stage: 'GROUP',
     teamA: { name: 'DILMAN WARRIORS', shortName: 'DWR', logo: '' },
-    teamB: { name: 'DILMAN ROYALS', shortName: 'DRS', logo: '' },
+    teamB: { name: 'DILMAN GLADIATORS', shortName: 'DGL', logo: '' },
     date: '2026-08-16',
     time: '02:00 PM IST',
     venue: 'MITS COLLEGE GROUND',
@@ -173,7 +173,7 @@ export const MatchFixturesData: MatchFixture[] = [
     id: 'm3',
     matchNumber: 3,
     stage: 'GROUP',
-    teamA: { name: 'DILMAN ROYALS', shortName: 'DRS', logo: '' },
+    teamA: { name: 'DILMAN GLADIATORS', shortName: 'DGL', logo: '' },
     teamB: { name: 'DILMAN TITANS', shortName: 'DTN', logo: '' },
     date: '2026-08-17',
     time: '09:00 AM IST',
