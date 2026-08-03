@@ -72,54 +72,72 @@ export const About: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative max-w-6xl mx-auto flex flex-col items-center justify-center gap-6"
+        className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8"
       >
+        {/* Left Circular DPL Logo (Desktop) */}
+        <motion.div
+          initial={{ scale: 0.85, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="hidden lg:flex shrink-0 items-center justify-center"
+        >
+          <div className="relative">
+            <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-amber-600 opacity-30 blur-sm" />
+            <img
+              src="/dpl_logo.jpg"
+              alt="DPL Official Logo"
+              className="relative h-36 w-36 xl:h-44 xl:w-44 rounded-full object-cover border-2 border-[#D4AF37]/60 shadow-xl shadow-amber-500/10 hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+        </motion.div>
+
         {/* Centered Text Content */}
-        <div className="text-center max-w-3xl mx-auto space-y-3 z-10">
+        <div className="text-center max-w-2xl mx-auto space-y-3 shrink">
           <Badge variant="gold" icon={<Sparkles className="h-3.5 w-3.5" />}>
             OFFICIAL MITS CRICKET LEAGUE
           </Badge>
           <h1 className="font-black font-display text-center">
             <span className="text-slate-400 text-xs sm:text-base font-bold tracking-widest uppercase block mb-1">ABOUT</span>
-            <span className="dilman-brand-text block text-4xl sm:text-7xl lg:text-8xl tracking-wider leading-none">DILMAN</span>
-            <span className="text-white block text-xl sm:text-4xl font-extrabold tracking-[0.18em] sm:tracking-[0.2em] uppercase mt-1 sm:mt-2">PREMIER LEAGUE</span>
+            <span className="dilman-brand-text block text-4xl sm:text-6xl lg:text-7xl xl:text-8xl tracking-wider leading-none">DILMAN</span>
+            <span className="text-white block text-xl sm:text-3xl lg:text-4xl font-extrabold tracking-[0.18em] sm:tracking-[0.2em] uppercase mt-1 sm:mt-2">PREMIER LEAGUE</span>
           </h1>
-          <p className="text-emerald-400 text-base sm:text-xl font-bold tracking-wide font-display">
-            (DPL)
-          </p>
         </div>
 
-        {/* Circular Images Container: Side-by-Side on Mobile (< lg), Flanking on Desktop (>= lg) */}
-        <div className="flex flex-row items-center justify-center gap-5 sm:gap-10 mt-2 lg:mt-0 w-full lg:w-auto lg:contents">
-          {/* Circular DPL Logo */}
-          <motion.div
-            initial={{ scale: 0.85, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative lg:absolute lg:left-4 xl:left-8 lg:top-1/2 lg:-translate-y-1/2 shrink-0"
-          >
-            <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-amber-600 opacity-25 blur-sm" />
-            <img
-              src="/dpl_logo.jpg"
-              alt="DPL Official Logo"
-              className="relative h-24 w-24 sm:h-36 sm:w-36 md:h-44 md:w-44 lg:h-52 lg:w-52 rounded-full object-cover border-2 border-[#D4AF37]/60 shadow-xl shadow-amber-500/10 hover:scale-105 transition-transform duration-300"
-            />
-          </motion.div>
-
-          {/* Circular Profile Picture */}
-          <motion.div
-            initial={{ scale: 0.85, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative lg:absolute lg:right-4 xl:right-8 lg:top-1/2 lg:-translate-y-1/2 shrink-0"
-          >
-            <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-amber-600 opacity-25 blur-sm" />
+        {/* Right Circular Profile Picture (Desktop) */}
+        <motion.div
+          initial={{ scale: 0.85, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="hidden lg:flex shrink-0 items-center justify-center"
+        >
+          <div className="relative">
+            <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-amber-600 opacity-30 blur-sm" />
             <img
               src="/dilman_profile.jpg"
               alt="DILMAN Profile"
-              className="relative h-24 w-24 sm:h-36 sm:w-36 md:h-44 md:w-44 lg:h-52 lg:w-52 rounded-full object-cover border-2 border-[#D4AF37]/60 shadow-xl shadow-amber-500/10 hover:scale-105 transition-transform duration-300"
+              className="relative h-36 w-36 xl:h-44 xl:w-44 rounded-full object-cover border-2 border-[#D4AF37]/60 shadow-xl shadow-amber-500/10 hover:scale-105 transition-transform duration-300"
             />
-          </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Mobile & Tablet Only (< lg): Side-by-Side Row of Both Circular Images */}
+        <div className="flex lg:hidden flex-row items-center justify-center gap-6 sm:gap-10 mt-2 w-full">
+          <div className="relative shrink-0">
+            <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-amber-600 opacity-30 blur-sm" />
+            <img
+              src="/dpl_logo.jpg"
+              alt="DPL Official Logo"
+              className="relative h-24 w-24 sm:h-32 sm:w-32 rounded-full object-cover border-2 border-[#D4AF37]/60 shadow-xl shadow-amber-500/10"
+            />
+          </div>
+          <div className="relative shrink-0">
+            <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-amber-600 opacity-30 blur-sm" />
+            <img
+              src="/dilman_profile.jpg"
+              alt="DILMAN Profile"
+              className="relative h-24 w-24 sm:h-32 sm:w-32 rounded-full object-cover border-2 border-[#D4AF37]/60 shadow-xl shadow-amber-500/10"
+            />
+          </div>
         </div>
       </motion.div>
 
