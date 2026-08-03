@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import confetti from 'canvas-confetti';
-import { Trophy, CheckCircle2, ArrowRight, ArrowLeft, Sparkles, User, Check, QrCode, Upload, Copy, ShieldAlert, CreditCard, FileCheck } from 'lucide-react';
+import { Trophy, CheckCircle2, ArrowRight, ArrowLeft, User, Check, QrCode, Upload, Copy, ShieldAlert, CreditCard, FileCheck } from 'lucide-react';
 import type { PlayerRegistrationData } from '../types';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';

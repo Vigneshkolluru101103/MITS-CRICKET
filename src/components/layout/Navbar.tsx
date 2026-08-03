@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Trophy, UserPlus, ChevronRight, ShieldCheck } from 'lucide-react';
+import { Menu, X, UserPlus, ChevronRight, ShieldCheck } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { useAuth } from '../../context/AuthContext';
 
