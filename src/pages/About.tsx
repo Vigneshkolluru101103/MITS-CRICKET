@@ -72,52 +72,55 @@ export const About: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-6"
+        className="relative max-w-6xl mx-auto flex flex-col items-center justify-center gap-6"
       >
-        {/* Circular DPL Logo on Left Side (Symmetrical to Right Picture) */}
-        <motion.div
-          initial={{ scale: 0.85, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="lg:absolute lg:left-4 xl:left-8 lg:top-1/2 lg:-translate-y-1/2 shrink-0"
-        >
-          <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#D4AF37] to-amber-600 opacity-40 blur-md" />
-          <img
-            src="/dpl_logo.jpg"
-            alt="DPL Official Logo"
-            className="relative h-36 w-36 sm:h-44 sm:w-44 md:h-48 md:w-48 lg:h-52 lg:w-52 rounded-full object-cover border-2 border-[#D4AF37]/60 shadow-2xl shadow-amber-500/20 hover:scale-105 transition-transform duration-300"
-          />
-        </motion.div>
-
         {/* Centered Text Content */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
+        <div className="text-center max-w-3xl mx-auto space-y-3 z-10">
           <Badge variant="gold" icon={<Sparkles className="h-3.5 w-3.5" />}>
             OFFICIAL MITS CRICKET LEAGUE
           </Badge>
           <h1 className="font-black font-display text-center">
-            <span className="text-slate-400 text-sm sm:text-base font-bold tracking-widest uppercase block mb-1">ABOUT</span>
-            <span className="dilman-brand-text block text-5xl sm:text-7xl lg:text-8xl tracking-wider leading-none">DILMAN</span>
-            <span className="text-white block text-2xl sm:text-4xl font-extrabold tracking-[0.2em] uppercase mt-2">PREMIER LEAGUE</span>
+            <span className="text-slate-400 text-xs sm:text-base font-bold tracking-widest uppercase block mb-1">ABOUT</span>
+            <span className="dilman-brand-text block text-4xl sm:text-7xl lg:text-8xl tracking-wider leading-none">DILMAN</span>
+            <span className="text-white block text-xl sm:text-4xl font-extrabold tracking-[0.18em] sm:tracking-[0.2em] uppercase mt-1 sm:mt-2">PREMIER LEAGUE</span>
           </h1>
-          <p className="text-emerald-400 text-lg sm:text-xl font-bold tracking-wide font-display">
+          <p className="text-emerald-400 text-base sm:text-xl font-bold tracking-wide font-display">
             (DPL)
           </p>
         </div>
 
-        {/* Circular Profile Picture on Right Side */}
-        <motion.div
-          initial={{ scale: 0.85, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="lg:absolute lg:right-4 xl:right-8 lg:top-1/2 lg:-translate-y-1/2 shrink-0"
-        >
-          <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#D4AF37] to-amber-600 opacity-40 blur-md" />
-          <img
-            src="/dilman_profile.jpg"
-            alt="DILMAN Profile"
-            className="relative h-36 w-36 sm:h-44 sm:w-44 md:h-48 md:w-48 lg:h-52 lg:w-52 rounded-full object-cover border-2 border-[#D4AF37]/60 shadow-2xl shadow-amber-500/20 hover:scale-105 transition-transform duration-300"
-          />
-        </motion.div>
+        {/* Circular Images Container: Side-by-Side on Mobile (< lg), Flanking on Desktop (>= lg) */}
+        <div className="flex flex-row items-center justify-center gap-5 sm:gap-10 mt-2 lg:mt-0 w-full lg:w-auto lg:contents">
+          {/* Circular DPL Logo */}
+          <motion.div
+            initial={{ scale: 0.85, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative lg:absolute lg:left-4 xl:left-8 lg:top-1/2 lg:-translate-y-1/2 shrink-0"
+          >
+            <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-amber-600 opacity-25 blur-sm" />
+            <img
+              src="/dpl_logo.jpg"
+              alt="DPL Official Logo"
+              className="relative h-24 w-24 sm:h-36 sm:w-36 md:h-44 md:w-44 lg:h-52 lg:w-52 rounded-full object-cover border-2 border-[#D4AF37]/60 shadow-xl shadow-amber-500/10 hover:scale-105 transition-transform duration-300"
+            />
+          </motion.div>
+
+          {/* Circular Profile Picture */}
+          <motion.div
+            initial={{ scale: 0.85, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative lg:absolute lg:right-4 xl:right-8 lg:top-1/2 lg:-translate-y-1/2 shrink-0"
+          >
+            <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-amber-600 opacity-25 blur-sm" />
+            <img
+              src="/dilman_profile.jpg"
+              alt="DILMAN Profile"
+              className="relative h-24 w-24 sm:h-36 sm:w-36 md:h-44 md:w-44 lg:h-52 lg:w-52 rounded-full object-cover border-2 border-[#D4AF37]/60 shadow-xl shadow-amber-500/10 hover:scale-105 transition-transform duration-300"
+            />
+          </motion.div>
+        </div>
       </motion.div>
 
       {/* Main Overview Card */}
