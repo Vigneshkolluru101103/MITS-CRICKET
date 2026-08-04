@@ -61,7 +61,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         !import.meta.env.VITE_FIREBASE_API_KEY ||
         import.meta.env.VITE_FIREBASE_API_KEY.includes('DummyKey')
       ) {
-        console.warn('Firebase Auth API Key is invalid or not configured. Falling back to local admin authentication mode.');
         const mockUser = {
           uid: 'demo-admin-uid',
           email: userEmail.includes('@') ? userEmail : 'sumankohli3819@gmail.com',

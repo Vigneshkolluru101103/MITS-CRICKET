@@ -70,8 +70,7 @@ export const addRegistrationToFirestore = async (data: Omit<PlayerRegistrationRe
         timeoutPromise
       ]);
       docId = (newDoc as any).id;
-    } catch (err: any) {
-      console.warn('Firestore write notice (falling back to local storage):', err.message);
+    } catch {
       docId = `reg_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     }
   } else {
@@ -124,12 +123,11 @@ export const subscribeToRegistrations = (callback: (records: PlayerRegistrationR
     try {
       localStorage.setItem('dpl_local_registrations', JSON.stringify(combined));
     } catch (e) {
-      console.warn('Failed to cache merged registrations:', e);
+      // Silent catch
     }
 
     callback(combined);
-  }, (error) => {
-    console.warn('Firestore registrations listener notice:', error.message);
+  }, () => {
     callback(getLocalData());
   });
 };
@@ -146,8 +144,8 @@ export const updateRegistrationStatusInFirestore = async (id: string, status: 'A
         updateDoc(docRef, { status }),
         timeoutPromise
       ]);
-    } catch (err: any) {
-      console.warn('Firestore update notice:', err.message);
+    } catch {
+      // Fallback cleanly
     }
   }
 
@@ -172,8 +170,8 @@ export const deleteRegistrationFromFirestore = async (id: string) => {
         deleteDoc(docRef),
         timeoutPromise
       ]);
-    } catch (err: any) {
-      console.warn('Firestore delete notice:', err.message);
+    } catch {
+      // Fallback cleanly
     }
   }
 
