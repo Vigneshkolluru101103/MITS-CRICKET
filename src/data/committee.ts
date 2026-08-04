@@ -1,31 +1,39 @@
 export interface CommitteeMemberItem {
   id: string;
   name: string;
-  role?: string;
+  teamName: string;
+  role: string;
   photo: string;
+  teamLogo: string;
   description?: string;
 }
 
 export const committeeData: CommitteeMemberItem[] = [
   {
     id: '1',
-    name: 'BHARGAV',
-    role: 'Captain - DILMAN WARRIORS',
-    photo: '/images/bharav.jpg',
+    name: 'SHIVARAJ',
+    teamName: 'DILMAN TITANS',
+    role: 'Franchise Captain',
+    photo: '/images/shivaraj.jpg',
+    teamLogo: '/images/logo_titans.jpg',
     description: 'Franchise Captain leading DILMAN Titans in the DPL Premier League.',
   },
   {
     id: '2',
-    name: 'SRINIVASULU',
-    role: 'Captain - DILMAN GLADIATORS',
-    photo: '/images/srinivasulu.jpg',
-    description: 'Franchise Captain leading DILMAN WARRIORS in the DPL Premier League.',
+    name: 'BHARGAV',
+    teamName: 'DILMAN WARRIORS',
+    role: 'Franchise Captain',
+    photo: '/images/bharav.jpg',
+    teamLogo: '/images/logo_warriors.jpg',
+    description: 'Franchise Captain leading DILMAN Warriors in the DPL Premier League.',
   },
   {
     id: '3',
-    name: 'SHIVARAJ',
-    role: 'Captain - DILMAN TITANS',
-    photo: '/images/shivaraj.jpg',
-    description: 'Franchise Captain leading DILMAN GLADIATORS in the DPL Premier League.',
+    name: 'SRINIVASULU',
+    teamName: 'DILMAN GLADIATORS',
+    role: 'Franchise Captain',
+    photo: '/images/srinivasulu.jpg',
+    teamLogo: '/images/logo_gladiators.jpg',
+    description: 'Franchise Captain leading DILMAN Gladiators in the DPL Premier League.',
   },
 ];
