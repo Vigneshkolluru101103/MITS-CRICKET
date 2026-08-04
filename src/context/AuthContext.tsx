@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { User } from 'firebase/auth';
 import { loginWithEmail, logoutUser, onAuthChange } from '../firebase/auth';
+import { isFirebaseConfigured } from '../firebase/config';
 
 interface AuthContextType {
   currentUser: User | null;
@@ -16,23 +17,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Check if there is an active local demo session
-    const storedMockUser = localStorage.getItem('dpl_admin_user');
-    const storedAuth = localStorage.getItem('dpl_admin_auth');
-    if (storedAuth === 'true' || storedMockUser) {
-      setCurrentUser({
-        uid: 'demo-admin-uid',
-        email: storedMockUser || 'sumankohli3819@gmail.com',
-        displayName: 'Admin Directorate',
-      } as User);
-      setLoading(false);
+    // Force auto-logout on page refresh
+    localStorage.removeItem('dpl_admin_user');
+    localStorage.removeItem('dpl_admin_auth');
+    sessionStorage.removeItem('dpl_admin_user');
+    sessionStorage.removeItem('dpl_admin_auth');
+
+    if (isFirebaseConfigured) {
+      logoutUser().catch(() => {});
     }
 
-    // Subscribe to Firebase Auth changes
     const unsubscribe = onAuthChange((user) => {
       if (user) {
         setCurrentUser(user);
-      } else if (!localStorage.getItem('dpl_admin_auth') && !localStorage.getItem('dpl_admin_user')) {
+      } else {
         setCurrentUser(null);
       }
       setLoading(false);
@@ -43,36 +41,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, pass: string): Promise<void> => {
     setLoading(true);
-    const userEmail = email.trim() || 'sumankohli3819@gmail.com';
-    
+    const userEmail = email.trim();
+
+    if (!userEmail || !pass) {
+      setLoading(false);
+      throw new Error('Email and password are required.');
+    }
+
     try {
       const user = await loginWithEmail(userEmail, pass);
       setCurrentUser(user);
       localStorage.removeItem('dpl_admin_user');
       localStorage.removeItem('dpl_admin_auth');
-    } catch (err: any) {
-      const errStr = (err?.message || err?.code || '').toString().toLowerCase();
-      
-      // If Firebase API key is missing, invalid, or dummy, fallback seamlessly to demo admin session
-      if (
-        errStr.includes('api-key-not-valid') || 
-        errStr.includes('invalid-api-key') ||
-        errStr.includes('auth/api-key-not-valid') ||
-        !import.meta.env.VITE_FIREBASE_API_KEY ||
-        import.meta.env.VITE_FIREBASE_API_KEY.includes('DummyKey')
-      ) {
+    } catch (err: unknown) {
+      if (!isFirebaseConfigured) {
         const mockUser = {
           uid: 'demo-admin-uid',
-          email: userEmail.includes('@') ? userEmail : 'sumankohli3819@gmail.com',
+          email: userEmail,
           displayName: 'Admin Directorate',
         } as User;
-        localStorage.setItem('dpl_admin_user', mockUser.email || 'sumankohli3819@gmail.com');
+        localStorage.setItem('dpl_admin_user', mockUser.email || 'admin@local.dev');
         localStorage.setItem('dpl_admin_auth', 'true');
         setCurrentUser(mockUser);
         return;
       }
 
-      throw new Error(err.message || 'Failed to sign in. Please verify your credentials.');
+      const message = err instanceof Error ? err.message : 'Failed to sign in. Please verify your credentials.';
+      throw new Error(message);
     } finally {
       setLoading(false);
     }
@@ -85,13 +80,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (err) {
       console.error('Firebase signOut error:', err);
     } finally {
-      // Clear ONLY admin authentication session credentials (preserve local database records)
       localStorage.removeItem('dpl_admin_user');
       localStorage.removeItem('dpl_admin_auth');
       sessionStorage.removeItem('dpl_admin_user');
       sessionStorage.removeItem('dpl_admin_auth');
-
-      // Reset state immediately
       setCurrentUser(null);
       setLoading(false);
     }

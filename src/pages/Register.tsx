@@ -20,7 +20,7 @@ const registrationSchema = z.object({
   phone: z.string().min(10, 'Valid 10-digit phone number required'),
   category: z.enum(['STUDENT', 'ALUMNI'] as const),
   rollNo: z.string().optional(),
-  batchYear: z.string().min(4, 'Batch year is required (e.g. 2026)'),
+  batchYear: z.string().regex(/^(19|20)\d{2}$/, 'Please enter a valid 4-digit graduation/batch year (e.g. 2026)'),
   department: z.string().min(2, 'Department is required'),
   role: z.string().min(1, 'Please select your primary role'),
   battingStyle: z.string().min(1, 'Please select your batting style'),
@@ -155,24 +155,27 @@ export const Register: React.FC = () => {
         name: data.fullName,
         phone: data.phone,
         email: data.email,
+        category: data.category,
+        rollNo: data.rollNo || '',
+        department: data.department || data.category,
         branch: data.department || data.category,
+        batchYear: data.batchYear,
         year: data.batchYear,
         section: 'A',
+        role: data.role,
+        battingStyle: data.battingStyle,
+        bowlingStyle: data.bowlingStyle,
+        tshirtSize: data.tshirtSize,
         jerseyName: data.fullName,
         transactionId: data.utrId,
         paymentScreenshotUrl: downloadUrl,
         status: 'Pending',
       });
 
-      if (!saveResult.savedToFirestore && !saveResult.savedLocally) {
-        throw new Error(saveResult.error || 'Failed to save registration. Please try again.');
-      }
-
       if (!saveResult.savedToFirestore) {
-        addToast(
-          'error',
-          'Firebase Save Failed',
-          saveResult.error || 'Registration saved locally only. Configure Firebase and deploy firestore.rules.'
+        throw new Error(
+          saveResult.error ||
+          'Could not save to Firebase. Check your internet connection and try again.'
         );
       }
 
@@ -192,9 +195,7 @@ export const Register: React.FC = () => {
       addToast(
         'success',
         'Registration Successful!',
-        saveResult.savedToFirestore
-          ? 'Receipt uploaded and saved to Firebase.'
-          : 'Saved on this device. Set up Firebase for admin dashboard sync.'
+        'Your registration has been saved. The admin team will verify your payment shortly.'
       );
     } catch (err: any) {
       addToast('error', 'Registration Error', err.message || 'Failed to complete registration.');

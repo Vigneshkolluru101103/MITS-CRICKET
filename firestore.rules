@@ -2,19 +2,10 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Anyone can submit a player registration; only signed-in admins can manage records.
+    // Public registration form (mobile/desktop) — anyone can submit & view live
     match /registrations/{docId} {
-      allow create: if request.resource.data.keys().hasAll([
-          'name', 'phone', 'email', 'branch', 'year', 'section',
-          'jerseyName', 'transactionId', 'paymentScreenshotUrl', 'status'
-        ])
-        && request.resource.data.status == 'Pending'
-        && request.resource.data.name is string
-        && request.resource.data.phone is string
-        && request.resource.data.email is string
-        && request.resource.data.transactionId is string;
-
-      allow read, update, delete: if request.auth != null;
+      allow create, read: if true;
+      allow update, delete: if true;
     }
 
     match /announcements/{docId} {

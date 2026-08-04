@@ -3,14 +3,14 @@ import {
   signOut, 
   onAuthStateChanged, 
   setPersistence,
-  browserLocalPersistence,
+  inMemoryPersistence,
   type User 
 } from 'firebase/auth';
 import { auth, isFirebaseConfigured } from './config';
 
-// Ensure standard browser local persistence only if Firebase is configured with a valid API key
+// Use inMemoryPersistence so page refresh automatically logs out admin
 if (isFirebaseConfigured) {
-  setPersistence(auth, browserLocalPersistence).catch((err) => {
+  setPersistence(auth, inMemoryPersistence).catch((err) => {
     console.warn('Firebase persistence warning:', err);
   });
 }

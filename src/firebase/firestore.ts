@@ -19,11 +19,19 @@ export interface PlayerRegistrationRecord {
   email: string;
   branch: string;
   year: string;
-  section: string;
+  section?: string;
   jerseyName: string;
   transactionId: string;
   paymentScreenshotUrl: string;
   status: 'Pending' | 'Approved' | 'Rejected';
+  category?: 'STUDENT' | 'ALUMNI';
+  rollNo?: string;
+  department?: string;
+  batchYear?: string;
+  role?: string;
+  battingStyle?: string;
+  bowlingStyle?: string;
+  tshirtSize?: string;
   createdAt?: Timestamp | string | number | any;
 }
 
@@ -62,11 +70,19 @@ const sanitizeScreenshotUrl = (url: string): string =>
   url.startsWith('data:') ? '' : url;
 
 const sanitizeRegistrationData = (
-  data: Omit<PlayerRegistrationRecord, 'id' | 'createdAt' | 'status'> & { status?: 'Pending' | 'Approved' | 'Rejected' }
-) => ({
-  ...data,
-  paymentScreenshotUrl: sanitizeScreenshotUrl(data.paymentScreenshotUrl || ''),
-});
+  data: Record<string, any>
+) => {
+  const sanitized: Record<string, any> = {};
+  for (const [key, value] of Object.entries(data)) {
+    if (value !== undefined) {
+      sanitized[key] = value;
+    }
+  }
+  if (sanitized.paymentScreenshotUrl) {
+    sanitized.paymentScreenshotUrl = sanitizeScreenshotUrl(sanitized.paymentScreenshotUrl);
+  }
+  return sanitized;
+};
 
 const getLocalRegistrations = (): PlayerRegistrationRecord[] => {
   try {
@@ -123,8 +139,11 @@ export const addRegistrationToFirestore = async (
       docId = newDoc.id;
       savedToFirestore = true;
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Unknown Firestore error';
-      firestoreError = message;
+      const firebaseErr = err as { code?: string; message?: string };
+      firestoreError =
+        firebaseErr.code === 'permission-denied'
+          ? 'Firestore permission denied. Check your Firestore Security Rules in Firebase Console.'
+          : firebaseErr.message || 'Unknown Firestore error';
       console.error('Firestore registration write failed:', err);
       docId = `reg_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     }
@@ -135,7 +154,7 @@ export const addRegistrationToFirestore = async (
 
   const newRecord: PlayerRegistrationRecord = {
     id: docId,
-    ...sanitized,
+    ...(sanitized as PlayerRegistrationRecord),
     status: newStatus,
     createdAt: new Date().toISOString(),
   };
@@ -160,7 +179,10 @@ export const addRegistrationToFirestore = async (
   };
 };
 
-export const subscribeToRegistrations = (callback: (records: PlayerRegistrationRecord[]) => void) => {
+export const subscribeToRegistrations = (
+  callback: (records: PlayerRegistrationRecord[]) => void,
+  onStatus?: (status: { firestoreConnected: boolean; error?: string }) => void
+) => {
   const publish = (records: PlayerRegistrationRecord[]) => callback(records);
 
   const publishMerged = (firestoreRecords: PlayerRegistrationRecord[]) => {
@@ -178,24 +200,42 @@ export const subscribeToRegistrations = (callback: (records: PlayerRegistrationR
   window.addEventListener(REGISTRATIONS_UPDATED_EVENT, onLocalUpdate);
 
   if (!isFirebaseConfigured) {
+    onStatus?.({ firestoreConnected: false, error: 'Firebase is not configured.' });
     return () => {
       window.removeEventListener(REGISTRATIONS_UPDATED_EVENT, onLocalUpdate);
     };
   }
 
-  const q = query(collection(db, 'registrations'), orderBy('createdAt', 'desc'));
+  const colRef = collection(db, 'registrations');
 
   const unsubscribe = onSnapshot(
-    q,
+    colRef,
     (snapshot) => {
+      onStatus?.({ firestoreConnected: true });
       const list: PlayerRegistrationRecord[] = snapshot.docs.map(docSnap => ({
         id: docSnap.id,
         ...docSnap.data(),
       })) as PlayerRegistrationRecord[];
+
+      // Client-side sort by createdAt
+      list.sort((a, b) => {
+        const timeA = a.createdAt?.seconds ? a.createdAt.seconds * 1000 : new Date(a.createdAt || 0).getTime();
+        const timeB = b.createdAt?.seconds ? b.createdAt.seconds * 1000 : new Date(b.createdAt || 0).getTime();
+        return timeB - timeA;
+      });
+
       publishMerged(list);
     },
     (err) => {
+      const firebaseErr = err as { code?: string; message?: string };
       console.error('Firestore registrations listener failed:', err);
+      onStatus?.({
+        firestoreConnected: false,
+        error:
+          firebaseErr.code === 'permission-denied'
+            ? 'Sign in with a Firebase admin account or adjust rules to view registrations.'
+            : firebaseErr.message || 'Could not connect to Firestore.',
+      });
       publishLocalOnly();
     }
   );

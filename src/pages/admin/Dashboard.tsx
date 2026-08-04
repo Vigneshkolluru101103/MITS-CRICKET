@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Clock, CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
+import { Users, Clock, CheckCircle2, XCircle, ArrowRight, AlertCircle, Wifi } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { subscribeToRegistrations, type PlayerRegistrationRecord } from '../../firebase/firestore';
+import { firebaseConfig, isFirebaseConfigured } from '../../firebase/config';
 import { Button } from '../../components/ui/Button';
 
 export const Dashboard: React.FC = () => {
   const [registrations, setRegistrations] = useState<PlayerRegistrationRecord[]>([]);
+  const [syncStatus, setSyncStatus] = useState<{ firestoreConnected: boolean; error?: string }>({
+    firestoreConnected: isFirebaseConfigured,
+  });
 
   useEffect(() => {
-    const unsubscribe = subscribeToRegistrations((data) => {
-      setRegistrations(data);
-    });
+    const unsubscribe = subscribeToRegistrations(
+      (data) => setRegistrations(data),
+      (status) => setSyncStatus(status)
+    );
     return () => unsubscribe();
   }, []);
 
@@ -57,9 +62,28 @@ export const Dashboard: React.FC = () => {
       <div>
         <h1 className="text-3xl font-black text-white font-display">Dashboard Metrics</h1>
         <p className="text-sm text-slate-400">
-          Realtime overview of player registrations and tournament metrics from Cloud Firestore.
+          Realtime overview of player registrations from Firebase ({firebaseConfig.projectId}).
         </p>
       </div>
+
+      {!syncStatus.firestoreConnected && (
+        <div className="glass-panel p-4 rounded-2xl border border-amber-500/40 bg-amber-500/10 flex items-start gap-3">
+          <AlertCircle className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
+          <div className="text-sm text-amber-100">
+            <p className="font-bold">Firestore not connected</p>
+            <p className="text-amber-200/80 mt-1">
+              {syncStatus.error || 'Log in with your Firebase admin email/password to load mobile registrations.'}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {syncStatus.firestoreConnected && (
+        <div className="glass-panel p-3 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 flex items-center gap-2 text-xs font-mono text-emerald-300">
+          <Wifi className="h-4 w-4" />
+          Live sync active — registrations from all devices appear here instantly.
+        </div>
+      )}
 
       {/* Metrics Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -1,14 +1,18 @@
 export const uploadToCloudinary = async (file: File): Promise<string> => {
-  // 1. Validate file format (JPG, JPEG, PNG)
-  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-  if (!allowedTypes.includes(file.type.toLowerCase())) {
-    throw new Error('Invalid file format. Only JPG, JPEG, and PNG images are allowed.');
+  // 1. Validate file format (JPG, JPEG, PNG, WEBP, HEIC, HEIF, etc.)
+  const fileType = (file.type || '').toLowerCase();
+  const fileName = (file.name || '').toLowerCase();
+  const isImageMime = fileType.startsWith('image/');
+  const isAllowedExt = /\.(jpg|jpeg|png|webp|heic|heif)$/i.test(fileName);
+
+  if (fileType && !isImageMime && !isAllowedExt) {
+    throw new Error('Invalid file format. Please upload an image file (JPG, PNG, WEBP, HEIC).');
   }
 
-  // 2. Validate file size (Max 5 MB)
-  const maxSizeBytes = 5 * 1024 * 1024;
+  // 2. Validate file size (Max 10 MB)
+  const maxSizeBytes = 10 * 1024 * 1024;
   if (file.size > maxSizeBytes) {
-    throw new Error('File size exceeds the maximum limit of 5 MB.');
+    throw new Error('File size exceeds the maximum limit of 10 MB.');
   }
 
   const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'rdtxedw7';
@@ -25,8 +29,9 @@ export const uploadToCloudinary = async (file: File): Promise<string> => {
 
   const endpoint = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
 
+  // Mobile networks can be slower, allow 35s timeout
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 6000);
+  const timeoutId = setTimeout(() => controller.abort(), 35000);
 
   try {
     const response = await fetch(endpoint, {
@@ -51,7 +56,7 @@ export const uploadToCloudinary = async (file: File): Promise<string> => {
   } catch (err: any) {
     clearTimeout(timeoutId);
     if (err.name === 'AbortError') {
-      throw new Error('Cloudinary upload request timed out.');
+      throw new Error('Cloudinary upload request timed out. Check connection or try a smaller image.');
     }
     if (err.name === 'TypeError' && err.message.includes('fetch')) {
       throw new Error('Network error: Unable to connect to Cloudinary servers. Please check your connection.');

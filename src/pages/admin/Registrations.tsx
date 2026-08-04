@@ -104,8 +104,9 @@ export const Registrations: React.FC = () => {
           <table className="w-full text-left text-sm text-slate-300">
             <thead className="bg-slate-950/80 text-xs font-mono font-bold text-slate-400 uppercase border-b border-slate-800">
               <tr>
-                <th className="px-6 py-4">Player Name</th>
+                <th className="px-6 py-4">Player Name & Category</th>
                 <th className="px-6 py-4">Phone / Contact</th>
+                <th className="px-6 py-4">Role & Style</th>
                 <th className="px-6 py-4">Branch & Year</th>
                 <th className="px-6 py-4">Transaction ID</th>
                 <th className="px-6 py-4">Screenshot</th>
@@ -116,23 +117,43 @@ export const Registrations: React.FC = () => {
             <tbody className="divide-y divide-slate-800/80">
               {filteredRegistrations.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-slate-500 font-mono text-xs">
+                  <td colSpan={8} className="px-6 py-12 text-center text-slate-500 font-mono text-xs">
                     No registrations found. Submit a player registration on the /register page to see Firestore records populate here.
                   </td>
                 </tr>
               ) : (
                 filteredRegistrations.map((item) => (
                   <tr key={item.id} className="hover:bg-slate-800/40 transition-colors">
-                    <td className="px-6 py-4 font-bold text-white">
-                      <div>{item.name}</div>
-                      <div className="text-xs text-[#D4AF37] font-mono font-normal">Jersey: {item.jerseyName || 'N/A'}</div>
+                    <td className="px-6 py-4">
+                      <div className="font-bold text-white flex items-center gap-2">
+                        <span>{item.name}</span>
+                        {item.category && (
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            {item.category}
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-xs text-slate-400 font-mono">
+                        Jersey: {item.jerseyName || item.name} {item.tshirtSize ? `(${item.tshirtSize})` : ''}
+                      </div>
                     </td>
                     <td className="px-6 py-4 font-mono text-xs text-slate-300">
-                      {item.phone}
+                      <div>{item.phone}</div>
+                      <div className="text-[11px] text-slate-500">{item.email}</div>
+                    </td>
+                    <td className="px-6 py-4 text-xs">
+                      <div className="font-semibold text-emerald-400 font-mono">
+                        {item.role ? item.role.replace('_', ' ') : 'N/A'}
+                      </div>
+                      <div className="text-slate-400 font-mono text-[11px]">
+                        {item.battingStyle || 'Standard Bat'} {item.bowlingStyle ? `| ${item.bowlingStyle}` : ''}
+                      </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="font-semibold text-slate-200">{item.branch}</div>
-                      <div className="text-xs text-slate-400 font-mono">Yr: {item.year} | Sec: {item.section}</div>
+                      <div className="font-semibold text-slate-200">{item.department || item.branch}</div>
+                      <div className="text-xs text-slate-400 font-mono">
+                        Yr: {item.batchYear || item.year} {item.rollNo ? `| Roll: ${item.rollNo}` : ''}
+                      </div>
                     </td>
                     <td className="px-6 py-4 font-mono text-xs text-amber-300 font-bold">
                       {item.transactionId}
