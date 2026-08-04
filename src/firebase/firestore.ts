@@ -27,6 +27,13 @@ export interface PlayerRegistrationRecord {
   createdAt?: Timestamp | string | number | any;
 }
 
+export interface RegistrationSaveResult {
+  id: string;
+  savedToFirestore: boolean;
+  savedLocally: boolean;
+  error?: string;
+}
+
 export interface GalleryFirestoreRecord {
   id?: string;
   title: string;
@@ -47,140 +54,192 @@ export interface AnnouncementFirestoreRecord {
   createdAt?: any;
 }
 
+const LOCAL_REGISTRATIONS_KEY = 'dpl_local_registrations';
+export const REGISTRATIONS_UPDATED_EVENT = 'dpl-registrations-updated';
+
+/** Firestore rejects large docs; never persist base64 data URLs. */
+const sanitizeScreenshotUrl = (url: string): string =>
+  url.startsWith('data:') ? '' : url;
+
+const sanitizeRegistrationData = (
+  data: Omit<PlayerRegistrationRecord, 'id' | 'createdAt' | 'status'> & { status?: 'Pending' | 'Approved' | 'Rejected' }
+) => ({
+  ...data,
+  paymentScreenshotUrl: sanitizeScreenshotUrl(data.paymentScreenshotUrl || ''),
+});
+
+const getLocalRegistrations = (): PlayerRegistrationRecord[] => {
+  try {
+    const records: PlayerRegistrationRecord[] = JSON.parse(localStorage.getItem(LOCAL_REGISTRATIONS_KEY) || '[]');
+    return records.map(r => ({
+      ...r,
+      paymentScreenshotUrl: sanitizeScreenshotUrl(r.paymentScreenshotUrl || ''),
+    }));
+  } catch {
+    return [];
+  }
+};
+
+const saveLocalRegistrations = (records: PlayerRegistrationRecord[]): boolean => {
+  try {
+    localStorage.setItem(LOCAL_REGISTRATIONS_KEY, JSON.stringify(records));
+    window.dispatchEvent(new Event(REGISTRATIONS_UPDATED_EVENT));
+    return true;
+  } catch (e) {
+    console.error('LocalStorage write failed:', e);
+    return false;
+  }
+};
+
+const mergeRegistrations = (
+  firestoreRecords: PlayerRegistrationRecord[],
+  localRecords: PlayerRegistrationRecord[]
+): PlayerRegistrationRecord[] => {
+  const firestoreIds = new Set(firestoreRecords.map(r => r.id));
+  const uniqueLocal = localRecords.filter(r => r.id && !firestoreIds.has(r.id));
+  return [...firestoreRecords, ...uniqueLocal];
+};
+
 // ----------------------------------------------------
 // REGISTRATIONS FIRESTORE HELPERS
 // ----------------------------------------------------
-export const addRegistrationToFirestore = async (data: Omit<PlayerRegistrationRecord, 'id' | 'createdAt' | 'status'> & { status?: 'Pending' | 'Approved' | 'Rejected' }) => {
-  let docId = '';
+export const addRegistrationToFirestore = async (
+  data: Omit<PlayerRegistrationRecord, 'id' | 'createdAt' | 'status'> & { status?: 'Pending' | 'Approved' | 'Rejected' }
+): Promise<RegistrationSaveResult> => {
   const newStatus = data.status || 'Pending';
+  const sanitized = sanitizeRegistrationData(data);
+  let docId = '';
+  let savedToFirestore = false;
+  let firestoreError: string | undefined;
 
   if (isFirebaseConfigured) {
-    const timeoutPromise = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error('Firestore write operation timed out.')), 2500)
-    );
-
     try {
       const regRef = collection(db, 'registrations');
-      const newDoc = await Promise.race([
-        addDoc(regRef, {
-          ...data,
-          status: newStatus,
-          createdAt: serverTimestamp(),
-        }),
-        timeoutPromise
-      ]);
-      docId = (newDoc as any).id;
-    } catch {
+      const newDoc = await addDoc(regRef, {
+        ...sanitized,
+        status: newStatus,
+        createdAt: serverTimestamp(),
+      });
+      docId = newDoc.id;
+      savedToFirestore = true;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Unknown Firestore error';
+      firestoreError = message;
+      console.error('Firestore registration write failed:', err);
       docId = `reg_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     }
   } else {
+    firestoreError = 'Firebase is not configured. Add VITE_FIREBASE_* variables to your .env file.';
     docId = `reg_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
   }
 
-  // Guarantee permanent persistence in localStorage
+  const newRecord: PlayerRegistrationRecord = {
+    id: docId,
+    ...sanitized,
+    status: newStatus,
+    createdAt: new Date().toISOString(),
+  };
+
+  let savedLocally = false;
   try {
-    const existing: PlayerRegistrationRecord[] = JSON.parse(localStorage.getItem('dpl_local_registrations') || '[]');
-    const newRecord: PlayerRegistrationRecord = {
-      id: docId,
-      ...data,
-      status: newStatus,
-      createdAt: new Date().toISOString(),
-    };
+    const existing = getLocalRegistrations();
     if (!existing.some(r => r.id === docId)) {
-      const updatedList = [newRecord, ...existing];
-      localStorage.setItem('dpl_local_registrations', JSON.stringify(updatedList));
+      savedLocally = saveLocalRegistrations([newRecord, ...existing]);
+    } else {
+      savedLocally = true;
     }
   } catch (e) {
-    console.error('LocalStorage write notice:', e);
+    console.error('LocalStorage registration save failed:', e);
   }
 
-  return docId;
+  return {
+    id: docId,
+    savedToFirestore,
+    savedLocally,
+    error: savedToFirestore ? undefined : firestoreError,
+  };
 };
 
 export const subscribeToRegistrations = (callback: (records: PlayerRegistrationRecord[]) => void) => {
-  const getLocalData = (): PlayerRegistrationRecord[] => {
-    try {
-      return JSON.parse(localStorage.getItem('dpl_local_registrations') || '[]');
-    } catch {
-      return [];
-    }
+  const publish = (records: PlayerRegistrationRecord[]) => callback(records);
+
+  const publishMerged = (firestoreRecords: PlayerRegistrationRecord[]) => {
+    const local = getLocalRegistrations();
+    const combined = mergeRegistrations(firestoreRecords, local);
+    saveLocalRegistrations(combined);
+    publish(combined);
   };
 
+  const publishLocalOnly = () => publish(getLocalRegistrations());
+
+  publishLocalOnly();
+
+  const onLocalUpdate = () => publishLocalOnly();
+  window.addEventListener(REGISTRATIONS_UPDATED_EVENT, onLocalUpdate);
+
+  if (!isFirebaseConfigured) {
+    return () => {
+      window.removeEventListener(REGISTRATIONS_UPDATED_EVENT, onLocalUpdate);
+    };
+  }
+
   const q = query(collection(db, 'registrations'), orderBy('createdAt', 'desc'));
-  
-  return onSnapshot(q, (snapshot) => {
-    const list: PlayerRegistrationRecord[] = snapshot.docs.map(docSnap => ({
-      id: docSnap.id,
-      ...docSnap.data(),
-    })) as PlayerRegistrationRecord[];
 
-    const local = getLocalData();
-    const firestoreIds = new Set(list.map(r => r.id));
-    const uniqueLocal = local.filter(r => r.id && !firestoreIds.has(r.id));
-    const combined = [...list, ...uniqueLocal];
-
-    // Keep localStorage updated with merged data
-    try {
-      localStorage.setItem('dpl_local_registrations', JSON.stringify(combined));
-    } catch (e) {
-      // Silent catch
+  const unsubscribe = onSnapshot(
+    q,
+    (snapshot) => {
+      const list: PlayerRegistrationRecord[] = snapshot.docs.map(docSnap => ({
+        id: docSnap.id,
+        ...docSnap.data(),
+      })) as PlayerRegistrationRecord[];
+      publishMerged(list);
+    },
+    (err) => {
+      console.error('Firestore registrations listener failed:', err);
+      publishLocalOnly();
     }
+  );
 
-    callback(combined);
-  }, () => {
-    callback(getLocalData());
-  });
+  return () => {
+    unsubscribe();
+    window.removeEventListener(REGISTRATIONS_UPDATED_EVENT, onLocalUpdate);
+  };
 };
 
 export const updateRegistrationStatusInFirestore = async (id: string, status: 'Approved' | 'Rejected' | 'Pending') => {
-  if (isFirebaseConfigured) {
-    const timeoutPromise = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error('Firestore update timed out.')), 2000)
-    );
-
+  if (isFirebaseConfigured && !id.startsWith('reg_')) {
     try {
       const docRef = doc(db, 'registrations', id);
-      await Promise.race([
-        updateDoc(docRef, { status }),
-        timeoutPromise
-      ]);
-    } catch {
-      // Fallback cleanly
+      await updateDoc(docRef, { status });
+    } catch (err) {
+      console.error('Firestore status update failed:', err);
     }
   }
 
   try {
-    const local: PlayerRegistrationRecord[] = JSON.parse(localStorage.getItem('dpl_local_registrations') || '[]');
+    const local = getLocalRegistrations();
     const updated = local.map(r => r.id === id ? { ...r, status } : r);
-    localStorage.setItem('dpl_local_registrations', JSON.stringify(updated));
+    saveLocalRegistrations(updated);
   } catch (e) {
-    console.error('LocalStorage status update notice:', e);
+    console.error('LocalStorage status update failed:', e);
   }
 };
 
 export const deleteRegistrationFromFirestore = async (id: string) => {
-  if (isFirebaseConfigured) {
-    const timeoutPromise = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error('Firestore delete timed out.')), 2000)
-    );
-
+  if (isFirebaseConfigured && !id.startsWith('reg_')) {
     try {
       const docRef = doc(db, 'registrations', id);
-      await Promise.race([
-        deleteDoc(docRef),
-        timeoutPromise
-      ]);
-    } catch {
-      // Fallback cleanly
+      await deleteDoc(docRef);
+    } catch (err) {
+      console.error('Firestore delete failed:', err);
     }
   }
 
   try {
-    const local: PlayerRegistrationRecord[] = JSON.parse(localStorage.getItem('dpl_local_registrations') || '[]');
-    const filtered = local.filter(r => r.id !== id);
-    localStorage.setItem('dpl_local_registrations', JSON.stringify(filtered));
+    const local = getLocalRegistrations();
+    saveLocalRegistrations(local.filter(r => r.id !== id));
   } catch (e) {
-    console.error('LocalStorage delete notice:', e);
+    console.error('LocalStorage delete failed:', e);
   }
 };
 
@@ -188,6 +247,11 @@ export const deleteRegistrationFromFirestore = async (id: string) => {
 // ANNOUNCEMENTS FIRESTORE HELPERS
 // ----------------------------------------------------
 export const subscribeToAnnouncements = (callback: (list: AnnouncementFirestoreRecord[]) => void) => {
+  if (!isFirebaseConfigured) {
+    callback([]);
+    return () => {};
+  }
+
   const q = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'));
   return onSnapshot(q, (snapshot) => {
     const list = snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as AnnouncementFirestoreRecord[];
@@ -208,6 +272,11 @@ export const deleteAnnouncementFromFirestore = async (id: string) => {
 // GALLERY FIRESTORE HELPERS
 // ----------------------------------------------------
 export const subscribeToGallery = (callback: (list: GalleryFirestoreRecord[]) => void) => {
+  if (!isFirebaseConfigured) {
+    callback([]);
+    return () => {};
+  }
+
   const q = query(collection(db, 'gallery'), orderBy('createdAt', 'desc'));
   return onSnapshot(q, (snapshot) => {
     const list = snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as GalleryFirestoreRecord[];

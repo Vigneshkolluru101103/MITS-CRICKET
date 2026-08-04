@@ -144,13 +144,14 @@ export const Register: React.FC = () => {
       if (paymentProofFile) {
         try {
           downloadUrl = await uploadToCloudinary(paymentProofFile);
-        } catch (cErr: any) {
-          console.warn('Cloudinary upload notice (using local image preview fallback):', cErr.message);
-          downloadUrl = paymentProofPreview || '';
+        } catch (cErr: unknown) {
+          const message = cErr instanceof Error ? cErr.message : 'Cloudinary upload failed';
+          console.warn('Cloudinary upload failed:', message);
+          addToast('error', 'Receipt Upload Failed', `${message} Registration will save without the receipt image.`);
         }
       }
 
-      const docId = await addRegistrationToFirestore({
+      const saveResult = await addRegistrationToFirestore({
         name: data.fullName,
         phone: data.phone,
         email: data.email,
@@ -159,24 +160,42 @@ export const Register: React.FC = () => {
         section: 'A',
         jerseyName: data.fullName,
         transactionId: data.utrId,
-        paymentScreenshotUrl: downloadUrl || paymentProofPreview || '',
+        paymentScreenshotUrl: downloadUrl,
         status: 'Pending',
       });
+
+      if (!saveResult.savedToFirestore && !saveResult.savedLocally) {
+        throw new Error(saveResult.error || 'Failed to save registration. Please try again.');
+      }
+
+      if (!saveResult.savedToFirestore) {
+        addToast(
+          'error',
+          'Firebase Save Failed',
+          saveResult.error || 'Registration saved locally only. Configure Firebase and deploy firestore.rules.'
+        );
+      }
 
       const registrationPass: PlayerRegistrationData = {
         ...data,
         role: data.role as any,
         highestLevel: 'College Cricket',
         pastMatchStats: 'N/A',
-        id: `DPL-${docId.substring(0, 6).toUpperCase()}`,
-        profileImage: downloadUrl || paymentProofPreview || 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
+        id: `DPL-${saveResult.id.substring(0, 6).toUpperCase()}`,
+        profileImage: downloadUrl || 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
         createdAt: new Date().toLocaleDateString(),
       };
 
       setSubmittedData(registrationPass);
       setShowConfirmationModal(true);
       confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-      addToast('success', 'Registration Successful!', 'Receipt processed & entry saved successfully.');
+      addToast(
+        'success',
+        'Registration Successful!',
+        saveResult.savedToFirestore
+          ? 'Receipt uploaded and saved to Firebase.'
+          : 'Saved on this device. Set up Firebase for admin dashboard sync.'
+      );
     } catch (err: any) {
       addToast('error', 'Registration Error', err.message || 'Failed to complete registration.');
     } finally {
