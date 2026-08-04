@@ -10,7 +10,7 @@ import {
   serverTimestamp,
   type Timestamp
 } from 'firebase/firestore';
-import { db } from './config';
+import { db, isFirebaseConfigured } from './config';
 
 export interface PlayerRegistrationRecord {
   id?: string;
@@ -54,16 +54,27 @@ export const addRegistrationToFirestore = async (data: Omit<PlayerRegistrationRe
   let docId = '';
   const newStatus = data.status || 'Pending';
 
-  try {
-    const regRef = collection(db, 'registrations');
-    const newDoc = await addDoc(regRef, {
-      ...data,
-      status: newStatus,
-      createdAt: serverTimestamp(),
-    });
-    docId = newDoc.id;
-  } catch (err: any) {
-    console.warn('Firestore write notice (using local fallback ID):', err.message);
+  if (isFirebaseConfigured) {
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('Firestore write operation timed out.')), 2500)
+    );
+
+    try {
+      const regRef = collection(db, 'registrations');
+      const newDoc = await Promise.race([
+        addDoc(regRef, {
+          ...data,
+          status: newStatus,
+          createdAt: serverTimestamp(),
+        }),
+        timeoutPromise
+      ]);
+      docId = (newDoc as any).id;
+    } catch (err: any) {
+      console.warn('Firestore write notice (falling back to local storage):', err.message);
+      docId = `reg_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    }
+  } else {
     docId = `reg_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
   }
 
@@ -124,11 +135,20 @@ export const subscribeToRegistrations = (callback: (records: PlayerRegistrationR
 };
 
 export const updateRegistrationStatusInFirestore = async (id: string, status: 'Approved' | 'Rejected' | 'Pending') => {
-  try {
-    const docRef = doc(db, 'registrations', id);
-    await updateDoc(docRef, { status });
-  } catch (err: any) {
-    console.warn('Firestore update notice:', err.message);
+  if (isFirebaseConfigured) {
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('Firestore update timed out.')), 2000)
+    );
+
+    try {
+      const docRef = doc(db, 'registrations', id);
+      await Promise.race([
+        updateDoc(docRef, { status }),
+        timeoutPromise
+      ]);
+    } catch (err: any) {
+      console.warn('Firestore update notice:', err.message);
+    }
   }
 
   try {
@@ -141,11 +161,20 @@ export const updateRegistrationStatusInFirestore = async (id: string, status: 'A
 };
 
 export const deleteRegistrationFromFirestore = async (id: string) => {
-  try {
-    const docRef = doc(db, 'registrations', id);
-    await deleteDoc(docRef);
-  } catch (err: any) {
-    console.warn('Firestore delete notice:', err.message);
+  if (isFirebaseConfigured) {
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('Firestore delete timed out.')), 2000)
+    );
+
+    try {
+      const docRef = doc(db, 'registrations', id);
+      await Promise.race([
+        deleteDoc(docRef),
+        timeoutPromise
+      ]);
+    } catch (err: any) {
+      console.warn('Firestore delete notice:', err.message);
+    }
   }
 
   try {
