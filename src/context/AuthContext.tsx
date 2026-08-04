@@ -86,9 +86,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (err) {
       console.error('Firebase signOut error:', err);
     } finally {
-      // Clear all client-side storage
-      localStorage.clear();
-      sessionStorage.clear();
+      // Clear ONLY admin authentication session credentials (preserve local database records)
+      localStorage.removeItem('dpl_admin_user');
+      localStorage.removeItem('dpl_admin_auth');
+      sessionStorage.removeItem('dpl_admin_user');
+      sessionStorage.removeItem('dpl_admin_auth');
 
       // Reset state immediately
       setCurrentUser(null);
