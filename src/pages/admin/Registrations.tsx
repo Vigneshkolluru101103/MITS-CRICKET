@@ -10,6 +10,35 @@ import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { CheckCircle2, XCircle, Trash2, Eye, Search, FileText } from 'lucide-react';
 
+const formatDateTime = (raw: any): string => {
+  if (!raw) return 'N/A';
+  try {
+    let date: Date;
+    if (typeof raw === 'object' && raw !== null && typeof raw.seconds === 'number') {
+      date = new Date(raw.seconds * 1000);
+    } else if (typeof raw === 'object' && raw !== null && typeof raw.toDate === 'function') {
+      date = raw.toDate();
+    } else if (typeof raw === 'number' || typeof raw === 'string') {
+      date = new Date(raw);
+    } else {
+      return 'N/A';
+    }
+
+    if (isNaN(date.getTime())) return String(raw);
+
+    return date.toLocaleString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
+  } catch {
+    return 'N/A';
+  }
+};
+
 export const Registrations: React.FC = () => {
   const [registrations, setRegistrations] = useState<PlayerRegistrationRecord[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -108,6 +137,7 @@ export const Registrations: React.FC = () => {
                 <th className="px-6 py-4">Phone / Contact</th>
                 <th className="px-6 py-4">Role & Style</th>
                 <th className="px-6 py-4">Branch & Year</th>
+                <th className="px-6 py-4">Date & Time</th>
                 <th className="px-6 py-4">Transaction ID</th>
                 <th className="px-6 py-4">Screenshot</th>
                 <th className="px-6 py-4">Status</th>
@@ -117,7 +147,7 @@ export const Registrations: React.FC = () => {
             <tbody className="divide-y divide-slate-800/80">
               {filteredRegistrations.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-6 py-12 text-center text-slate-500 font-mono text-xs">
+                  <td colSpan={9} className="px-6 py-12 text-center text-slate-500 font-mono text-xs">
                     No registrations found. Submit a player registration on the /register page to see Firestore records populate here.
                   </td>
                 </tr>
@@ -134,7 +164,7 @@ export const Registrations: React.FC = () => {
                         )}
                       </div>
                       <div className="text-xs text-slate-400 font-mono">
-                        Jersey: {item.jerseyName || item.name} {item.tshirtSize ? `(${item.tshirtSize})` : ''}
+                        Jersey: {item.jerseyName || item.name}
                       </div>
                     </td>
                     <td className="px-6 py-4 font-mono text-xs text-slate-300">
@@ -154,6 +184,9 @@ export const Registrations: React.FC = () => {
                       <div className="text-xs text-slate-400 font-mono">
                         Yr: {item.batchYear || item.year} {item.rollNo ? `| Roll: ${item.rollNo}` : ''}
                       </div>
+                    </td>
+                    <td className="px-6 py-4 font-mono text-xs text-slate-300 whitespace-nowrap">
+                      <div className="font-semibold text-slate-200">{formatDateTime(item.createdAt)}</div>
                     </td>
                     <td className="px-6 py-4 font-mono text-xs text-amber-300 font-bold">
                       {item.transactionId}

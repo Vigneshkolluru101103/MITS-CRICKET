@@ -25,7 +25,6 @@ const registrationSchema = z.object({
   role: z.string().min(1, 'Please select your primary role'),
   battingStyle: z.string().min(1, 'Please select your batting style'),
   bowlingStyle: z.string().min(1, 'Please select your bowling style'),
-  tshirtSize: z.string().min(1, 'Please select your jersey size'),
   utrId: z.string().min(1, 'Valid UTR / Transaction ID required'),
   agreeRules: z.boolean().refine(val => val === true, 'You must accept the Terms & Conditions'),
 });
@@ -41,7 +40,6 @@ type FormValues = {
   role: string;
   battingStyle: string;
   bowlingStyle: string;
-  tshirtSize: string;
   utrId: string;
   agreeRules: boolean;
 };
@@ -81,7 +79,6 @@ export const Register: React.FC = () => {
       role: '',
       battingStyle: '',
       bowlingStyle: '',
-      tshirtSize: '',
       utrId: '',
       agreeRules: false,
     },
@@ -101,7 +98,7 @@ export const Register: React.FC = () => {
         fieldsToValidate.push('rollNo');
       }
     } else if (currentStep === 3) {
-      fieldsToValidate = ['role', 'battingStyle', 'bowlingStyle', 'tshirtSize'];
+      fieldsToValidate = ['role', 'battingStyle', 'bowlingStyle'];
     }
 
     const isStepValid = await trigger(fieldsToValidate);
@@ -165,7 +162,6 @@ export const Register: React.FC = () => {
         role: data.role,
         battingStyle: data.battingStyle,
         bowlingStyle: data.bowlingStyle,
-        tshirtSize: data.tshirtSize,
         jerseyName: data.fullName,
         transactionId: data.utrId,
         paymentScreenshotUrl: downloadUrl,
@@ -391,7 +387,7 @@ export const Register: React.FC = () => {
               <p className="text-xs text-slate-400 mt-1">Specify your primary match role and batting/bowling attributes.</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-mono font-semibold text-slate-300 uppercase mb-2">Primary Role *</label>
                 <select
@@ -435,22 +431,6 @@ export const Register: React.FC = () => {
                   <option value="Does Not Bowl">Does Not Bowl</option>
                 </select>
                 {errors.bowlingStyle && <p className="text-xs text-rose-400 mt-1">{errors.bowlingStyle.message}</p>}
-              </div>
-
-              <div>
-                <label className="block text-xs font-mono font-semibold text-slate-300 uppercase mb-2">Official Jersey Size *</label>
-                <select
-                  {...register('tshirtSize')}
-                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#C5A059] focus:outline-none text-sm"
-                >
-                  <option value="">Select Jersey Size</option>
-                  <option value="S">Small (S)</option>
-                  <option value="M">Medium (M)</option>
-                  <option value="L">Large (L)</option>
-                  <option value="XL">Extra Large (XL)</option>
-                  <option value="XXL">Double XL (XXL)</option>
-                </select>
-                {errors.tshirtSize && <p className="text-xs text-rose-400 mt-1">{errors.tshirtSize.message}</p>}
               </div>
             </div>
           </motion.div>

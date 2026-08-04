@@ -22,7 +22,7 @@ export interface PlayerRegistrationData {
   highestLevel: string;
   pastMatchStats: string;
   profileImage?: string;
-  tshirtSize: string;
+  tshirtSize?: string;
   agreeRules: boolean;
   createdAt?: string;
 }
